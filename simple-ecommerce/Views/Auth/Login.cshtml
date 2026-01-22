@@ -1,0 +1,44 @@
+﻿@{
+    var returnUrl = ViewData["ReturnUrl"] as string;
+}
+           <!-- Begin Login Content Area -->
+<div class="page-section mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-xs-12 col-lg-6 mb-30">
+                <!-- Login Form s-->
+                <form action="/auth/Login" method="post">
+                    @if (!string.IsNullOrEmpty(returnUrl))
+                    {
+                        <input type="hidden" name="returnUrl" value="@returnUrl" />
+                    }
+                    <div class="login-form">
+                        <h4 class="login-title">Login</h4>
+                        <div class="row">
+                            <div class="col-md-12 col-12 mb-20">
+                                <label>Phone Number*</label>
+                                <input name="Phone" class="mb-0" type="text" placeholder="Phone Number">
+                            </div>
+                            <div class="col-12 mb-20">
+                                <label>Password</label>
+                                <input name="Password" class="mb-0" type="password" placeholder="Password">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="check-box d-inline-block ml-0 ml-md-2 mt-10">
+                                    <input name="RememberMe" type="checkbox" id="remember_me" value="true">
+                                    <label for="remember_me">Remember me</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mt-10 mb-20 text-left text-md-right">
+                                <a href="#"> Forgotten pasward?</a>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="register-button mt-0">Login</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
