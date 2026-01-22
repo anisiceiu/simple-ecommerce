@@ -1785,8 +1785,8 @@ textarea:focus {
 	transform: rotate(180deg);
 }
 .ht-menu > li .ht-currency-trigger span::after,
-.ht-menu > li .ht-language-trigger span::after,
-.hm-minicart-trigger .item-text::after {
+.ht-menu > li .ht-language-trigger span::after
+ {
 	content: "\f106";
 	float: right;
 	font-weight: 400;
@@ -1803,8 +1803,8 @@ textarea:focus {
 }
 .ht-menu > li .ht-setting-trigger span::after, 
 .ht-menu > li .ht-currency-trigger span::after, 
-.ht-menu > li .ht-language-trigger span::after, 
-.hm-minicart-trigger .item-text::after {
+.ht-menu > li .ht-language-trigger span::after
+{
 	content: "\f107";
 	font-size: 14px;
 	color: #a4a4a4;

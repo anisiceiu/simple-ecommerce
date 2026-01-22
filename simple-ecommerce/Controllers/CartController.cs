@@ -8,21 +8,10 @@ namespace simple_ecommerce.Controllers
     {
         private const string CartKey = "CART";
 
+        [HttpGet]
         public IActionResult GetCartSummary()
         {
-            var cartJson = HttpContext.Session.GetString("CART");
-            var cart = string.IsNullOrEmpty(cartJson)
-                ? new List<CartItemViewModel>()
-                : JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson);
-
-            var totalItems = cart.Sum(x => x.Quantity);
-            var totalAmount = cart.Sum(x => x.Price * x.Quantity);
-
-           return Json(new
-            {
-                count = totalItems,
-                total = totalAmount
-            });
+            return ViewComponent("CartSummary");
         }
         public IActionResult Index()
         {
@@ -51,7 +40,7 @@ namespace simple_ecommerce.Controllers
             }
 
             SaveCart(cart);
-            return RedirectToAction("Index", "Home");
+            return NoContent();
         }
 
         public IActionResult Remove(int id)

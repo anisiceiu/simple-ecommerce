@@ -534,3 +534,46 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/
+
+
+function refreshCartSummary() {
+	$.ajax({
+		url: '/Cart/GetCartSummary', // controller action
+		type: 'GET',
+		success: function (html) {
+			$('#cart-summary-container').html(html);
+		},
+		error: function () {
+			console.error('Failed to refresh cart summary');
+		}
+	});
+}
+
+$(document).ready(function () {
+	$('.add-to-cart').click(function () {
+		var btn = $(this);
+		var productId = btn.data('id');
+		var productName = btn.data('name');
+		var productPrice = btn.data('price');
+
+		$.ajax({
+			url: '/Cart/Add',
+			type: 'POST',
+			data: {
+				id: productId,
+				name: productName,
+				price: productPrice
+			},
+			success: function () {
+				// Optional: refresh cart summary via ViewComponent
+				if (typeof refreshCartSummary === 'function') {
+					refreshCartSummary();
+				}
+				
+			},
+			error: function () {
+				
+			}
+		});
+	});
+});

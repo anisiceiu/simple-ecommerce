@@ -1,0 +1,12 @@
+﻿@model CartSummaryViewModel
+
+<a href="/Cart/Index" class="nav-link">
+    <div class="hm-minicart-trigger">
+        <span class="item-icon"></span>
+        <span class="item-text">
+            <span id="cart-total">@Model.Total</span>
+            <span id="cart-count" class="cart-item-count">@Model.Count</span>
+        </span>
+
+    </div>
+</a>

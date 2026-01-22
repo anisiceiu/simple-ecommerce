@@ -59,14 +59,9 @@
                                         <div class="add-actions">
                                             <ul class="add-actions-link">
                                                 <li class="add-cart active">
-                                                    <a asp-controller="Cart"
-                                                       asp-action="Add"
-                                                       asp-route-id="@item.Id"
-                                                       asp-route-name="@item.Name"
-                                                       asp-route-price="@item.Price" >Add to cart</a>
+                                                    <a style="cursor:pointer" class="add-to-cart" data-id="@item.Id" data-name="@item.Name" data-price="@item.Price">Add to cart</a>
                                                 </li>
                                                 <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                                <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
                                             </ul>
                                         </div>
                                     </div>
