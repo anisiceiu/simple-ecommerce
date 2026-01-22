@@ -32,7 +32,11 @@ namespace simple_ecommerce
             .AddDefaultTokenProviders();
 
             builder.Services.AddControllersWithViews();
-
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+            });
             #region DI
             builder.Services.AddInfrastructure();
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -82,7 +86,7 @@ namespace simple_ecommerce
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseRouting();
 
             app.UseAuthentication();
