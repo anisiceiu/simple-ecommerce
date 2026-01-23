@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using simple_ecommerce.Models;
 using System.Globalization;
 
 namespace simple_ecommerce.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private const string CartKey = "CART";
