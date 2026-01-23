@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Products";
+    Layout = "_LayoutAdmin";
+}
+
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+<table id="productsTable" class="table table-bordered" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Active</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+</table>
+</div>
+</div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#productsTable').DataTable({
+            ajax: {
+                url: '/Product/GetAll',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'name' },
+                { data: 'description' },
+                { data: 'price' },
+                { data: 'stock' },
+                { data: 'isActive',
+                  render: function(data) {
+                      return data ? 'Yes' : 'No';
+                  }
+                },
+                { data: 'createdAt',
+                  render: function(data) {
+                      return new Date(data).toLocaleDateString();
+                  }
+                }
+            ],
+            pageLength: 10,
+            responsive: true
+        });
+    });
+</script>
