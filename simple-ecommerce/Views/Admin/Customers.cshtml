@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Customers";
+    Layout = "_LayoutAdmin";
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="customersTable" class="table table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>UserName</th>
+                        <th>Phone Number</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#customersTable').DataTable({
+            ajax: {
+                url: '/Admin/GetAllCustomers',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'id' },
+                { data: 'userName' },
+                { data: 'phoneNumber' },
+                { data: 'email' }
+            ],
+            pageLength: 10,
+            responsive: true
+        });
+    });
+</script>
