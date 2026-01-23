@@ -27,11 +27,25 @@ namespace simple_ecommerce.Controllers
             _orderItemService = orderItemService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
         {
-            var products = await _productService.GetProductsAsync();
+            var allProducts = await _productService.GetProductsAsync();
+
+            int totalItems = allProducts.Count();
+            var products = allProducts
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Pass pagination info to the view
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+            ViewBag.TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
             return View(products);
         }
+
 
         public async Task<IActionResult> ProductDetails(int id)
         {
