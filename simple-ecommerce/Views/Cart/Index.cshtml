@@ -10,6 +10,7 @@
                 }
                 else
                 {
+                    <div id="cart-container">
                     <form action="#">
                         <div class="table-content table-responsive">
                             <table class="table">
@@ -35,6 +36,8 @@
                                                 <label>Quantity</label>
                                                 <div class="cart-plus-minus">
                                                     <input class="cart-plus-minus-box" value="@item.Quantity" onchange="onQuatityChange(@item.ProductId,this)" min="1" type="number">
+                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                                    <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                                 </div>
                                             </td>
                                             <td class="product-subtotal"><span class="amount">$@item.Total</span></td>
@@ -46,12 +49,9 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="coupon-all">
-                                <div class="coupon">
-                                    <input id="coupon_code" class="input-text" name="coupon_code" value="" placeholder="Coupon code" type="text">
-                                    <input class="button" name="apply_coupon" value="Apply coupon" type="submit">
-                                </div>
+                                
                                 <div class="coupon2">
-                                        <input class="button" type="button" name="Clear_cart" value="Clear cart" asp-action="Clear">
+                                        <a class="button btn btn-dark" name="Clear_cart" asp-action="Clear">Clear cart</a>
                                 </div>
                             </div>
                         </div>
@@ -69,6 +69,7 @@
                         </div>
                     </div>
                 </form>
+                </div>
                 }
             </div>
         </div>
@@ -78,7 +79,8 @@
 <script>
     function onQuatityChange(productId,ele)
     {
-        let quantity= $(ele).val();
+        let el= $(ele).val();
+        alert();
         $.ajax({
         url: '/Cart/Update',
         type: 'POST',

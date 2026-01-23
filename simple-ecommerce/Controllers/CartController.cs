@@ -66,7 +66,7 @@ namespace simple_ecommerce.Controllers
                 item.Quantity = quantity;
 
             SaveCart(cart);
-            return RedirectToAction("Index");
+            return Ok();
         }
 
         public IActionResult Clear()

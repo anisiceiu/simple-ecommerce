@@ -1,4 +1,4 @@
-/*--------------------------------------------------
+﻿/*--------------------------------------------------
 Template Name: limupa;
 Description: limupa - Digital Products Store ECommerce Bootstrap 4 Template;
 Template URI:;
@@ -576,4 +576,43 @@ $(document).ready(function () {
 			}
 		});
 	});
+});
+
+
+function reloadCart() {
+	$("#cart-container").load("/Cart/Index #cart-container > *");
+}
+
+$(document).on('click', '.inc, .dec', function () {
+	let wrapper = $(this).closest('.cart-plus-minus');
+	let input = wrapper.find('.cart-qty-input');
+
+	let qty = parseInt(input.val(), 10);
+
+	if ($(this).hasClass('inc')) {
+		qty++;
+	} else {
+		qty = Math.max(1, qty - 1);
+	}
+
+	input.val(qty).trigger('input');
+});
+
+let debounceTimer;
+$(document).on('input', '.cart-qty-input', function () {
+	let productId = $(this).data('id');
+	let quantity = parseInt(this.value, 10);
+
+	clearTimeout(debounceTimer);
+	debounceTimer = setTimeout(() => {
+		$.ajax({
+			url: '/Cart/Update',
+			type: 'POST',
+			contentType: 'application/json',
+			data: JSON.stringify({ id: productId, quantity: quantity }),
+			success: function () {
+				reloadCart(); // 🔥 re-render entire cart
+			}
+		});
+	}, 300);
 });
