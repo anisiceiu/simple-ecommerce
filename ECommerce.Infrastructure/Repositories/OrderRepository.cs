@@ -38,6 +38,7 @@ namespace ECommerce.Infrastructure.Repositories
         public async Task<Order> AddAsync(Order order)
         {
             _context.Orders.Add(order);
+            _context.OrderAddress.Add(order.ShippingAddress);
             await _context.SaveChangesAsync();
             return order;
         }

@@ -200,6 +200,41 @@ namespace ECommerce.Infrastructure.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("ECommerce.Domain.Entities.OrderAddress", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Phone")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("OrderAddress");
+                });
+
             modelBuilder.Entity("ECommerce.Domain.Order", b =>
                 {
                     b.Property<int>("Id")
@@ -476,6 +511,17 @@ namespace ECommerce.Infrastructure.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("ECommerce.Domain.Entities.OrderAddress", b =>
+                {
+                    b.HasOne("ECommerce.Domain.Order", "Order")
+                        .WithOne("ShippingAddress")
+                        .HasForeignKey("ECommerce.Domain.Entities.OrderAddress", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("ECommerce.Domain.Order", b =>
                 {
                     b.HasOne("ECommerce.Domain.ApplicationUser", "User")
@@ -586,6 +632,9 @@ namespace ECommerce.Infrastructure.Migrations
             modelBuilder.Entity("ECommerce.Domain.Order", b =>
                 {
                     b.Navigation("OrderItems");
+
+                    b.Navigation("ShippingAddress")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

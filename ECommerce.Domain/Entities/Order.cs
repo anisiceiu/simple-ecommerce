@@ -1,4 +1,5 @@
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace ECommerce.Domain;
 public class Order
@@ -13,7 +14,7 @@ public class Order
     public string Status { get; set; } // Pending, Confirmed, Cancelled
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
+    public OrderAddress ShippingAddress { get; set; }
     // Navigation
     public ApplicationUser User { get; set; }
     public ICollection<OrderItem> OrderItems { get; set; }

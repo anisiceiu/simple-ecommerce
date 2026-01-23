@@ -1,6 +1,7 @@
 ﻿namespace ECommerce.Infrastructure;
 
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Order> Orders { get; set; }
     public DbSet<OrderItem> OrderItems { get; set; }
     public DbSet<Address> Addresses { get; set; }
-
+    public DbSet<OrderAddress> OrderAddress { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -41,5 +42,12 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationUser>()
        .HasIndex(u => u.PhoneNumber)
        .IsUnique(); // enforce unique phone number
+
+        // One-to-One: Order -> OrderAddress
+        builder.Entity<Order>()
+            .HasOne(o => o.ShippingAddress)
+            .WithOne(a => a.Order)
+            .HasForeignKey<OrderAddress>(a => a.OrderId)
+            .OnDelete(DeleteBehavior.Cascade); // safe: deleting order deletes its address
     }
 }

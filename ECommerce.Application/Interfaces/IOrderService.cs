@@ -1,4 +1,5 @@
 ﻿using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,6 @@ namespace ECommerce.Application.Interfaces
         Task<Order> CreateAsync(Order order);
         Task<bool> UpdateStatusAsync(int id, string status);
         Task<bool> DeleteAsync(int id);
+        
     }
 }

@@ -18,14 +18,14 @@ namespace ECommerce.Application.Services
             _repo = repo;
         }
 
-        public Task<IEnumerable<Order>> GetAllAsync()
-            => _repo.GetAllAsync();
+        public async Task<IEnumerable<Order>> GetAllAsync()
+            => await _repo.GetAllAsync();
 
-        public Task<Order?> GetByIdAsync(int id)
-            => _repo.GetByIdAsync(id);
+        public async Task<Order?> GetByIdAsync(int id)
+            => await _repo.GetByIdAsync(id);
 
-        public Task<Order> CreateAsync(Order order)
-            => _repo.AddAsync(order);
+        public async Task<Order> CreateAsync(Order order)
+            => await _repo.AddAsync(order);
 
         public async Task<bool> UpdateStatusAsync(int id, string status)
         {
