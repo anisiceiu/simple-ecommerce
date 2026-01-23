@@ -26,6 +26,7 @@ namespace ECommerce.Application.Services
             var products = await _repo.GetAllAsync();
             return products.Select(p => new ProductDto
             {
+                Id = p.Id,
                 CategoryId = p.CategoryId,
                 CreatedAt = p.CreatedAt,
                 Description = p.Description,

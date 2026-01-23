@@ -1,39 +1,30 @@
-using System.Diagnostics;
 using ECommerce.Application.DTOs;
+using ECommerce.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using simple_ecommerce.Models;
+using System.Diagnostics;
 
 namespace simple_ecommerce.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IProductService _productService;
+        public HomeController(ILogger<HomeController> logger, IProductService productService)
         {
             _logger = logger;
+            _productService = productService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = new List<ProductDto> {
-                new ProductDto{ Id = 1, Name="Product 1",Price=10},
-                new ProductDto{ Id = 2, Name="Product 2",Price=15},
-                new ProductDto{ Id = 3, Name="Product 3",Price=20},
-                new ProductDto{ Id = 4, Name="Product 4",Price=25},
-            };
-
+            var products = await _productService.GetProductsAsync();
             return View(products);
         }
 
-        public IActionResult ProductDetails(int id)
+        public async Task<IActionResult> ProductDetails(int id)
         {
-            var products = new List<ProductDto> {
-                new ProductDto{ Id = 1, Name="Product 1",Price=10},
-                new ProductDto{ Id = 2, Name="Product 2",Price=15},
-                new ProductDto{ Id = 3, Name="Product 3",Price=20},
-                new ProductDto{ Id = 4, Name="Product 4",Price=25},
-            };
+            var products = await _productService.GetProductsAsync();
 
             var pro = products.FirstOrDefault(c=> c.Id == id);
 
