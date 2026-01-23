@@ -13,23 +13,25 @@ namespace simple_ecommerce.Controllers
     public class ProductController : Controller
     {
         private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly ICategoryService _CategoryService;
+        public ProductController(IProductService productService, ICategoryService categoriesService)
         {
-          _productService = productService;      
+          _productService = productService;
+            _CategoryService = categoriesService;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             var vm = new ProductCreateVM
             {
                 Product = new ProductDto(),
-                //Categories = _context.Categories
-                //            .Where(c => c.IsActive)
-                //            .Select(c => new SelectListItem
-                //            {
-                //                Value = c.Id.ToString(),
-                //                Text = c.Name
-                //            }).ToList()
+                Categories = (await _CategoryService.GetAllAsync()).Where(c => c.IsActive)
+                            .Select(c => new SelectListItem
+                            {
+                                Value = c.Id.ToString(),
+                                Text = c.Name
+                            }).ToList()
+
             };
 
             return View(vm);
@@ -51,13 +53,12 @@ namespace simple_ecommerce.Controllers
             }
 
             // Reload dropdown if validation fails
-            //vm.Categories = _context.Categories
-            //                .Where(c => c.IsActive)
-            //                .Select(c => new SelectListItem
-            //                {
-            //                    Value = c.Id.ToString(),
-            //                    Text = c.Name
-            //                }).ToList();
+            vm.Categories = (await _CategoryService.GetAllAsync()).Where(c => c.IsActive)
+                                  .Select(c => new SelectListItem
+                                  {
+                                      Value = c.Id.ToString(),
+                                      Text = c.Name
+                                  }).ToList();
 
             return View(vm);
         }

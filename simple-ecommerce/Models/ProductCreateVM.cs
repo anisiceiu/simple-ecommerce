@@ -8,6 +8,6 @@ namespace simple_ecommerce.Models
     {
         public ProductDto Product { get; set; }
 
-        public IEnumerable<SelectListItem> Categories { get; set; }
+        public IEnumerable<SelectListItem> Categories { get; set; }=new List<SelectListItem>();
     }
 }
