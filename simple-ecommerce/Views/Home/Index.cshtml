@@ -22,7 +22,11 @@
                             <!-- shop-item-filter-list end -->
                         </div>
                         <div class="toolbar-amount">
-                            <span>Showing 1 to 9 of 15</span>
+                            <span>
+                                Showing @((ViewBag.CurrentPage - 1) * ViewBag.PageSize + 1)-
+                                @(Math.Min(ViewBag.CurrentPage * ViewBag.PageSize, ViewBag.TotalItems))
+                                of @ViewBag.TotalItems item(s)
+                            </span>
                         </div>
                     </div>
                     <!-- product-select-box start -->
