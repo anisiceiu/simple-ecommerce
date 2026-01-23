@@ -1,0 +1,23 @@
+﻿@using ECommerce.Domain
+@model Category
+@{
+    Layout = "_LayoutAdmin";
+}
+<h2>Create Category</h2>
+
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label class="form-check-label">Is Active</label>
+    </div>
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

@@ -1,4 +1,5 @@
-﻿using ECommerce.Application.Interfaces;
+﻿using ECommerce.Application.DTOs;
+using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
 using ECommerce.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,10 @@ namespace simple_ecommerce.Controllers
         {
             return View();
         }
+        public IActionResult Create()
+        {
+            return View();
+        }
         // GET: Categories
         public async Task<IActionResult> GetAll()
         {
@@ -30,20 +35,20 @@ namespace simple_ecommerce.Controllers
 
        
          
-        // GET: Categories/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
 
         // POST: Categories/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category)
+        public async Task<IActionResult> Create(CategoryDto dto)
         {
             if (!ModelState.IsValid)
-                return View(category);
-
+                return View(dto);
+            var category = new Category
+            {
+                 Name = dto.Name,
+                 CreatedAt = dto.CreatedAt,
+                 IsActive = dto.IsActive,
+            };
             await _repo.AddAsync(category);
             return RedirectToAction(nameof(Index));
         }
