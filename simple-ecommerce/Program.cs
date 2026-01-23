@@ -43,6 +43,14 @@ namespace simple_ecommerce
             builder.Services.AddInfrastructure();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IProductService, ProductService>();
+
+            builder.Services.AddScoped<ICartService, CartService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+            
+
+
             #endregion
 
             // Configure cookie paths

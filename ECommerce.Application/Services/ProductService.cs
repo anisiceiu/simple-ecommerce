@@ -54,5 +54,34 @@ namespace ECommerce.Application.Services
             };
             await _repo.AddAsync(product);
         }
+        public Task<Product?> GetByIdAsync(int id)
+       => _repo.GetByIdAsync(id);
+
+        public async Task<bool> UpdateAsync(int id, Product product)
+        {
+            var existing = await _repo.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            existing.Name = product.Name;
+            existing.Description = product.Description;
+            existing.Price = product.Price;
+            existing.Stock = product.Stock;
+            existing.ImageUrl = product.ImageUrl;
+            existing.IsActive = product.IsActive;
+            existing.CategoryId = product.CategoryId;
+
+            await _repo.UpdateAsync(existing);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var existing = await _repo.GetByIdAsync(id);
+            if (existing == null) return false;
+
+            await _repo.DeleteAsync(id);
+            return true;
+        }
     }
+
 }
