@@ -11,5 +11,6 @@ namespace ECommerce.Application.Interfaces
     {
         Task<ApplicationUser?> ValidateUserAsync(string phone, string password);
         Task<IList<string>> GetRolesAsync(ApplicationUser user);
+        Task<ApplicationUser?> AddUserAsync(ApplicationUser user, string password);
     }
 }

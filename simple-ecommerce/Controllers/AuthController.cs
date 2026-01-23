@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
+using ECommerce.Domain;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +16,45 @@ namespace simple_ecommerce.Controllers
         public AuthController(IAuthService authService)
         {
             _authService = authService;
+        }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(CreateUserDto dto)
+        {
+            if (string.IsNullOrEmpty(dto.Phone))
+                ModelState.AddModelError(nameof(dto.Phone), "Phone number is required");
+
+            if (dto.Password != dto.ConfirmPassword)
+                ModelState.AddModelError(nameof(dto.ConfirmPassword), "Passwords do not match");
+
+            if (!ModelState.IsValid)
+                return View(dto);
+
+            var user = new ApplicationUser
+            {
+                UserName = dto.Phone,
+                NormalizedUserName = (dto.FirstName + " " + dto.LastName).ToUpper(),
+                Email = $"no_{dto.Phone}@test.com",
+                PhoneNumber = dto.Phone,
+                EmailConfirmed = true,
+                PhoneNumberConfirmed = true
+            };
+
+            var result = await _authService.AddUserAsync(user, dto.Password);
+
+            if (result == null)
+            {
+                ModelState.AddModelError("", "User registration failed");
+                return View(dto);
+            }
+
+            return RedirectToAction("Login", "Auth");
         }
 
         [HttpGet]

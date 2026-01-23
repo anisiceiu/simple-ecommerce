@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using ECommerce.Domain;
+using Microsoft.AspNetCore.Mvc;
 using simple_ecommerce.Models;
 using System.Text.Json;
 
@@ -52,9 +53,10 @@ namespace simple_ecommerce.Controllers
                 cart.Remove(item);
 
             SaveCart(cart);
-            return NoContent();
+            return RedirectToAction("Index",cart);
         }
 
+        [HttpPost]
         public IActionResult Update(int id, int quantity)
         {
             var cart = GetCart();
@@ -64,13 +66,14 @@ namespace simple_ecommerce.Controllers
                 item.Quantity = quantity;
 
             SaveCart(cart);
-            return NoContent();
+            return RedirectToAction("Index");
         }
 
         public IActionResult Clear()
         {
             HttpContext.Session.Remove(CartKey);
-            return NoContent();
+
+            return RedirectToAction("Index");
         }
 
         private List<CartItemViewModel> GetCart()

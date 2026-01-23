@@ -1,0 +1,40 @@
+﻿<!-- Begin Login Content Area -->
+<div class="page-section mb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-6 col-xs-12">
+                <form action="/Auth/Register" method="post">
+                    <div class="login-form">
+                        <h4 class="login-title">Register</h4>
+                        <div class="row">
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>First Name</label>
+                                <input name="FirstName" class="mb-0" type="text" placeholder="First Name">
+                            </div>
+                            <div class="col-md-6 col-12 mb-20">
+                                <label>Last Name</label>
+                                <input name="LastName" class="mb-0" type="text" placeholder="Last Name">
+                            </div>
+                            <div class="col-md-12 mb-20">
+                                <label>Phone Number*</label>
+                                <input name="Phone" class="mb-0" type="text" placeholder="Phone Number">
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Password</label>
+                                <input name="Password" class="mb-0" type="password" placeholder="Password">
+                            </div>
+                            <div class="col-md-6 mb-20">
+                                <label>Confirm Password</label>
+                                <input name="ConfirmPassword" class="mb-0" type="password" placeholder="Confirm Password">
+                            </div>
+                            <p>@Html.ValidationSummary(true, "", new { @class = "text-danger mb-3" })</p>
+                            <div class="col-12">
+                                <button type="submit" class="register-button mt-0">Register</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

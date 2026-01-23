@@ -2,13 +2,7 @@
 @using Microsoft.AspNetCore.Http
 
 @{
-    var cartJson = Context.Session.GetString("CART");
-    var cart = string.IsNullOrEmpty(cartJson)
-        ? new List<CartItemViewModel>()
-        : JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson);
-
-    var totalItems = cart.Sum(x => x.Quantity);
-    var totalAmount = cart.Sum(x => x.Price * x.Quantity);
+    
 }
 
 <!doctype html>
@@ -107,14 +101,14 @@
                                     <!-- Currency Area End Here -->
                                     <!-- Begin Language Area -->
                                     <li>
-                                        <span class="language-selector-wrapper">Language :</span>
-                                        <div class="ht-language-trigger"><span>English</span></div>
-                                        <div class="language ht-language">
-                                            <ul class="ht-setting-list">
-                                                <li class="active"><a href="#"><img src="images/menu/flag-icon/1.jpg" alt="">English</a></li>
-                                                <li><a href="#"><img src="images/menu/flag-icon/2.jpg" alt="">Français</a></li>
-                                            </ul>
-                                        </div>
+                                        @if(User.Identity?.IsAuthenticated == false)
+                                         {
+                                            <a style="text-decoration: none;color: black;font-weight: 100;" asp-controller="Auth" asp-action="Register">Register</a>
+                                        }
+                                        else
+                                        {
+                                            <a href="#">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Guest")</a>
+                                        }
                                     </li>
                                     <!-- Language Area End Here -->
                                 </ul>
