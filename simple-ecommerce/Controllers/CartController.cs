@@ -1,4 +1,5 @@
-﻿using ECommerce.Domain;
+﻿using ECommerce.Application.DTOs;
+using ECommerce.Domain;
 using Microsoft.AspNetCore.Mvc;
 using simple_ecommerce.Models;
 using System.Text.Json;
@@ -57,13 +58,13 @@ namespace simple_ecommerce.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(int id, int quantity)
+        public IActionResult Update([FromBody] CartUpdateDto dto)
         {
             var cart = GetCart();
-            var item = cart.FirstOrDefault(x => x.ProductId == id);
+            var item = cart.FirstOrDefault(x => x.ProductId == dto.Id);
 
             if (item != null)
-                item.Quantity = quantity;
+                item.Quantity = dto.Quantity;
 
             SaveCart(cart);
             return Ok();

@@ -585,7 +585,7 @@ function reloadCart() {
 
 $(document).on('click', '.inc, .dec', function () {
 	let wrapper = $(this).closest('.cart-plus-minus');
-	let input = wrapper.find('.cart-qty-input');
+	let input = wrapper.find('.cart-plus-minus-box');
 
 	let qty = parseInt(input.val(), 10);
 
@@ -599,7 +599,7 @@ $(document).on('click', '.inc, .dec', function () {
 });
 
 let debounceTimer;
-$(document).on('input', '.cart-qty-input', function () {
+$(document).on('input', '.cart-plus-minus-box', function () {
 	let productId = $(this).data('id');
 	let quantity = parseInt(this.value, 10);
 
