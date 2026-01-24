@@ -35,7 +35,7 @@ namespace ECommerce.Application.Services
                 Name = p.Name,
                 Price = p.Price,
                 Stock = p.Stock,
-                Ratings = p.Ratings
+                //Ratings = p.Ratings.ToList()
             }).ToList();
         }
 

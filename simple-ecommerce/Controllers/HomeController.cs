@@ -93,15 +93,15 @@ namespace simple_ecommerce.Controllers
             var products = await _productService.GetProductsAsync();
 
             var product = products.FirstOrDefault(c => c.Id == id);
-            var ratings = product.Ratings ?? new List<ProductRating>();
+            //var ratings = product.Ratings ?? new List<ProductRating>();
 
-            var vm = new ProductDetailsVM
-            {
-                Product = product,
-                AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0,
-                TotalRatings = ratings.Count()
-            };
-            return View(vm);
+            //var vm = new ProductDetailsVM
+            //{
+            //    Product = product,
+            //    AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0,
+            //    TotalRatings = ratings.Count()
+            //};
+            return View(product);
         }
 
         [Authorize]

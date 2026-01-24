@@ -24,6 +24,6 @@ namespace ECommerce.Application.DTOs
         public string ImageUrl { get; set; } = string.Empty;
         public IFormFile? Image { get; set; }
         public bool IsActive { get; set; } = true;
-        public ICollection<ProductRating> Ratings { get; set; }
+        //public List<ProductRating> Ratings { get; set; }
     }
 }
