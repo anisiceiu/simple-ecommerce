@@ -199,34 +199,27 @@
                     <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
                     <!-- btn-clear-all end -->
                     <!-- filter-sub-area start -->
-                    <div class="filter-sub-area">
-                        <h5 class="filter-sub-titel">Brand</h5>
-                        <div class="categori-checkbox">
-                            <form action="#">
-                                <ul>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">Prime Video (13)</a></li>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">Computers (12)</a></li>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">Electronics (11)</a></li>
-                                </ul>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- filter-sub-area end -->
-                    <!-- filter-sub-area start -->
                     <div class="filter-sub-area pt-sm-10 pt-xs-10">
                         <h5 class="filter-sub-titel">Categories</h5>
                         <div class="categori-checkbox">
-                            <form action="#">
-                                <ul>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">Graphic Corner (10)</a></li>
-                                    <li><input type="checkbox" name="product-categori"><a href="#"> Studio Design (6)</a></li>
-                                </ul>
+                            <form id="filterForm">
+                                @foreach (var cat in ViewBag.Categories)
+                                {
+                                    <li>
+                                        <input type="checkbox"
+                                               name="categories"
+                                               value="@cat.Id"
+                                               onchange="onCategoryChange()"
+                                               @(ViewBag.SelectedCategories?.Contains(cat.Id) == true ? "checked" : "") />
+                                        @cat.Name
+                                    </li>
+                                }
                             </form>
                         </div>
                     </div>
                     <!-- filter-sub-area end -->
                     <!-- filter-sub-area start -->
-                    <div class="filter-sub-area pt-sm-10 pt-xs-10">
+                  @*   <div class="filter-sub-area pt-sm-10 pt-xs-10">
                         <h5 class="filter-sub-titel">Size</h5>
                         <div class="size-checkbox">
                             <form action="#">
@@ -238,37 +231,9 @@
                                 </ul>
                             </form>
                         </div>
-                    </div>
+                    </div> *@
                     <!-- filter-sub-area end -->
-                    <!-- filter-sub-area start -->
-                    <div class="filter-sub-area pt-sm-10 pt-xs-10">
-                        <h5 class="filter-sub-titel">Color</h5>
-                        <div class="color-categoriy">
-                            <form action="#">
-                                <ul>
-                                    <li><span class="white"></span><a href="#">White (1)</a></li>
-                                    <li><span class="black"></span><a href="#">Black (1)</a></li>
-                                    <li><span class="Orange"></span><a href="#">Orange (3) </a></li>
-                                    <li><span class="Blue"></span><a href="#">Blue  (2) </a></li>
-                                </ul>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- filter-sub-area end -->
-                    <!-- filter-sub-area start -->
-                    <div class="filter-sub-area pt-sm-10 pb-sm-15 pb-xs-15">
-                        <h5 class="filter-sub-titel">Dimension</h5>
-                        <div class="categori-checkbox">
-                            <form action="#">
-                                <ul>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">40x60cm (6)</a></li>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">60x90cm (6)</a></li>
-                                    <li><input type="checkbox" name="product-categori"><a href="#">80x120cm (6)</a></li>
-                                </ul>
-                            </form>
-                        </div>
-                    </div>
-                    <!-- filter-sub-area end -->
+                    
                 </div>
                 <!--sidebar-categores-box end  -->
 
@@ -285,6 +250,22 @@
         url.searchParams.set("sort", sort);
         url.searchParams.set("page", 1); // reset page on sort change
         window.location.href = url.toString();
+    }
+
+    function onCategoryChange()
+    {
+         const form = document.getElementById("filterForm");
+            const params = new URLSearchParams(new FormData(form));
+
+            const url = new URL(window.location.href);
+            const currentSort = url.searchParams.get("sort");
+                if (currentSort) {
+                    params.set("sort", currentSort);
+                }
+            url.search = params.toString();
+            url.searchParams.set("page", 1);
+
+            window.location.href = url.toString();
     }
 
 </script>

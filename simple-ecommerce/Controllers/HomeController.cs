@@ -4,6 +4,7 @@ using ECommerce.Domain;
 using ECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using simple_ecommerce.Models;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -17,27 +18,45 @@ namespace simple_ecommerce.Controllers
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         private readonly IOrderItemService _orderItemService;
-        
+        private readonly ICategoryService _categoryService;
+
         public HomeController(ILogger<HomeController> logger, IProductService productService,
-            IOrderService orderService, IOrderItemService orderItemService)
+            IOrderService orderService, IOrderItemService orderItemService, ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
             _orderService = orderService;
             _orderItemService = orderItemService;
+            _categoryService = categoryService;
         }
 
-        public async Task<IActionResult> Index(string sort = "", int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(
+                    List<int> categories = null,
+                    string sort = "",
+                    int page = 1,
+                    int pageSize = 5)
         {
+            // 🔹 Categories for sidebar
+            ViewBag.Categories = (await _categoryService.GetAllAsync())
+                                    .Where(c => c.IsActive)
+                                    .ToList();
+
+            ViewBag.SelectedCategories = categories;
+
+            // 🔹 Start query (better if service returns IQueryable)
             var productsQuery = (await _productService.GetProductsAsync()).AsQueryable();
 
-            //SORTING
+            // ✅ CATEGORY FILTER (MISSING PART)
+            if (categories != null && categories.Any())
+                productsQuery = productsQuery.Where(p => categories.Contains(p.CategoryId));
+
+            // ✅ SORT
             productsQuery = sort switch
             {
                 "asc" => productsQuery.OrderBy(p => p.Name),
                 "desc" => productsQuery.OrderByDescending(p => p.Name),
                 "price" => productsQuery.OrderBy(p => p.Price),
-                _ => productsQuery.OrderBy(p => p.Id) // default
+                _ => productsQuery.OrderBy(p => p.Id)
             };
 
             int totalItems = productsQuery.Count();
@@ -47,7 +66,7 @@ namespace simple_ecommerce.Controllers
                 .Take(pageSize)
                 .ToList();
 
-            ViewBag.CurrentSort = sort; // to keep dropdown selected
+            ViewBag.CurrentSort = sort;
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalItems = totalItems;
@@ -55,6 +74,7 @@ namespace simple_ecommerce.Controllers
 
             return View(products);
         }
+
 
 
 
