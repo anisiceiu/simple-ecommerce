@@ -196,7 +196,7 @@
                         <h2>Filter By</h2>
                     </div>
                     <!-- btn-clear-all start -->
-                    <button class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
+                    <button onclick="clearAllCategories()" class="btn-clear-all mb-sm-30 mb-xs-30">Clear all</button>
                     <!-- btn-clear-all end -->
                     <!-- filter-sub-area start -->
                     <div class="filter-sub-area pt-sm-10 pt-xs-10">
@@ -268,4 +268,16 @@
             window.location.href = url.toString();
     }
 
+   function clearAllCategories() {
+        // uncheck all category checkboxes
+        document
+            .querySelectorAll('#filterForm input[type="checkbox"]')
+            .forEach(cb => cb.checked = false);
+
+        // OPTIONAL: trigger filter reload
+        // onCategoryChange();
+
+        // OPTIONAL: submit form if you're using GET filters
+        // document.getElementById('filterForm').submit();
+    }
 </script>

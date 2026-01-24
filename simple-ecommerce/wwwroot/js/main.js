@@ -51,7 +51,7 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
  /*----------------------------------------*/
  	// Li's Dropdown Menu
 	$('.ht-setting-trigger, .ht-currency-trigger, .ht-language-trigger, .cw-sub-menu').on('click', function (e) {
-		debugger
+		
 		  e.preventDefault();
  		$(this).toggleClass('is-active');
  		$(this).siblings('.ht-setting, .ht-currency, .ht-language, .cw-sub-menu li').slideToggle();
