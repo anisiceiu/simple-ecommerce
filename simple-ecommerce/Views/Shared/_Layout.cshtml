@@ -1,8 +1,23 @@
 ﻿@using System.Text.Json
 @using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
 
 @{
+    var cartJson = HttpContextAccessor.HttpContext?
+        .Session.GetString("CART");
 
+    var cart = string.IsNullOrEmpty(cartJson)
+        ? new List<CartItemViewModel>()
+        : JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson);
+
+    var totalItems = cart.Sum(x => x.Quantity);
+    var totalAmount = cart.Sum(x => x.Price * x.Quantity);
+
+    var myCartModel = new CartSummaryViewModel
+    {
+        Count = totalItems,
+        Total = totalAmount
+    };
 }
 
 <!doctype html>
@@ -151,9 +166,14 @@
                          
                                     <!-- Begin Header Mini Cart Area -->
                                     <li class="hm-minicart">
+                                        <a asp-action="Index" asp-controller="Cart" class="nav-link">
                                         <div id="cart-summary-container">
+                                            
                                             @await Component.InvokeAsync("CartSummary")
+                                           
+                                           @*  @await Html.PartialAsync("_MyCart", myCartModel) *@
                                         </div>
+                                        </a>
                                     </li>
                                     <!-- Header Mini Cart Area End Here -->
                                 </ul>

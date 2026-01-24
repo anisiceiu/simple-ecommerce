@@ -39,6 +39,8 @@ namespace simple_ecommerce
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
+
+            builder.Services.AddHttpContextAccessor();
             #region DI
             builder.Services.AddInfrastructure();
             builder.Services.AddScoped<IAuthService, AuthService>();
