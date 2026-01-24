@@ -1,4 +1,4 @@
-using ECommerce.Application.DTOs;
+﻿using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
 using ECommerce.Domain.Entities;
@@ -27,17 +27,27 @@ namespace simple_ecommerce.Controllers
             _orderItemService = orderItemService;
         }
 
-        public async Task<IActionResult> Index(int page = 1, int pageSize = 5)
+        public async Task<IActionResult> Index(string sort = "", int page = 1, int pageSize = 5)
         {
-            var allProducts = await _productService.GetProductsAsync();
+            var productsQuery = (await _productService.GetProductsAsync()).AsQueryable();
 
-            int totalItems = allProducts.Count();
-            var products = allProducts
+            //SORTING
+            productsQuery = sort switch
+            {
+                "asc" => productsQuery.OrderBy(p => p.Name),
+                "desc" => productsQuery.OrderByDescending(p => p.Name),
+                "price" => productsQuery.OrderBy(p => p.Price),
+                _ => productsQuery.OrderBy(p => p.Id) // default
+            };
+
+            int totalItems = productsQuery.Count();
+
+            var products = productsQuery
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-            // Pass pagination info to the view
+            ViewBag.CurrentSort = sort; // to keep dropdown selected
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;
             ViewBag.TotalItems = totalItems;
@@ -45,6 +55,7 @@ namespace simple_ecommerce.Controllers
 
             return View(products);
         }
+
 
 
         public async Task<IActionResult> ProductDetails(int id)

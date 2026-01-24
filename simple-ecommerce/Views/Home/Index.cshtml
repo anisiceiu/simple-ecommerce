@@ -33,14 +33,11 @@
                     <div class="product-select-box">
                         <div class="product-short">
                             <p>Sort By:</p>
-                            <select class="nice-select">
-                                <option value="trending">Relevance</option>
-                                <option value="sales">Name (A - Z)</option>
-                                <option value="sales">Name (Z - A)</option>
-                                <option value="rating">Price (Low &gt; High)</option>
-                                <option value="date">Rating (Lowest)</option>
-                                <option value="price-asc">Model (A - Z)</option>
-                                <option value="price-asc">Model (Z - A)</option>
+                            <select onchange="onChangeSort(this)" class="nice-select" id="sortSelect">
+                                <option value="">Default</option>
+                                <option value="asc" selected="@(ViewBag.CurrentSort == "asc")">Name (A - Z)</option>
+                                <option value="desc" selected="@(ViewBag.CurrentSort == "desc")">Name (Z - A)</option>
+                                <option value="price" selected="@(ViewBag.CurrentSort == "price")">Price (Low > High)</option>
                             </select>
                         </div>
                     </div>
@@ -160,7 +157,7 @@
                                         @if (ViewBag.CurrentPage > 1)
                                         {
                                             <li>
-                                                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" class="Previous">
+                                                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, sort = ViewBag.CurrentSort })" class="Previous">
                                                     <i class="fa fa-chevron-left"></i> Previous
                                                 </a>
                                             </li>
@@ -169,14 +166,14 @@
                                         @for (int i = 1; i <= ViewBag.TotalPages; i++)
                                         {
                                             <li class="@(i == ViewBag.CurrentPage ? "active" : "")">
-                                                <a href="@Url.Action("Index", new { page = i })">@i</a>
+                                                <a href="@Url.Action("Index", new { page = i,sort=ViewBag.CurrentSort })">@i</a>
                                             </li>
                                         }
 
                                         @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                                         {
                                             <li>
-                                                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" class="Next">
+                                                <a href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, sort = ViewBag.CurrentSort })" class="Next">
                                                     Next <i class="fa fa-chevron-right"></i>
                                                 </a>
                                             </li>
@@ -279,3 +276,15 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    function onChangeSort(ele)
+    {
+        const sort = ele.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set("sort", sort);
+        url.searchParams.set("page", 1); // reset page on sort change
+        window.location.href = url.toString();
+    }
+
+</script>
