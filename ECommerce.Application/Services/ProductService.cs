@@ -34,7 +34,8 @@ namespace ECommerce.Application.Services
                 IsActive = p.IsActive,
                 Name = p.Name,
                 Price = p.Price,
-                Stock = p.Stock
+                Stock = p.Stock,
+                Ratings = p.Ratings
             }).ToList();
         }
 
@@ -81,6 +82,11 @@ namespace ECommerce.Application.Services
 
             await _repo.DeleteAsync(id);
             return true;
+        }
+
+        public async Task RateProduct(string userId, int productId, int rating)
+        {
+           await _repo.RateProduct(userId,productId,rating);
         }
     }
 

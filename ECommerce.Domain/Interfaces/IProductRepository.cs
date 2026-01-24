@@ -14,5 +14,6 @@ namespace ECommerce.Domain.Interfaces
         Task<Product?> GetByIdAsync(int id);
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
+        Task RateProduct(string userId, int productId, int rating);
     }
 }

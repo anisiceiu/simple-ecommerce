@@ -5438,3 +5438,57 @@ span.required {
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/
+.user-rating {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	gap: 6px;
+}
+
+	.user-rating li {
+		font-size: 24px;
+		color: #ccc; /* empty star */
+		cursor: pointer;
+		transition: color 0.2s ease;
+	}
+
+		.user-rating li:hover,
+		.user-rating li.hovered {
+			color: #f5c518; /* gold */
+		}
+
+.user-rating {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	gap: 8px;
+}
+
+	.user-rating li i {
+		color: #ccc !important;
+		font-size: 26px !important;
+		cursor: pointer !important;
+	}
+
+	.user-rating li.hovered i,
+	.user-rating li.selected i {
+		color: #f5c518 !important;
+	}
+.avg-rating {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	gap: 4px;
+}
+
+	.avg-rating li i.fa-star {
+		color: #f5c518; /* filled */
+		font-size: 18px;
+	}
+
+	.avg-rating li i.fa-star-o {
+		color: #ccc; /* empty */
+	}

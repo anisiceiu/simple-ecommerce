@@ -618,3 +618,11 @@ $(document).on('input', '.cart-plus-minus-box', function () {
 		});
 	}, 300);
 });
+
+$(document).on('mouseenter', '.user-rating li', function () {
+	$(this).prevAll().addBack().addClass('hovered');
+});
+
+$(document).on('mouseleave', '.user-rating', function () {
+	$(this).children('li').removeClass('hovered');
+});

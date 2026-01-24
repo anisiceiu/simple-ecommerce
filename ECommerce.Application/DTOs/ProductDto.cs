@@ -1,3 +1,5 @@
+using ECommerce.Domain.Entities;
+
 ﻿using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -22,5 +24,6 @@ namespace ECommerce.Application.DTOs
         public string ImageUrl { get; set; } = string.Empty;
         public IFormFile? Image { get; set; }
         public bool IsActive { get; set; } = true;
+        public ICollection<ProductRating> Ratings { get; set; }
     }
 }

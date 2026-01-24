@@ -1,5 +1,5 @@
 ﻿@using ECommerce.Application.DTOs
-@model ProductDto
+@model ProductDetailsVM
 <!-- content-wraper start -->
 <div class="content-wraper">
     <div class="container">
@@ -21,21 +21,42 @@
             <div class="col-lg-7 col-md-6">
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
-                        <h2>@Model.Name</h2>
+                        <h2>@Model.Product.Name</h2>
                         <span class="product-details-ref">Reference: demo_15</span>
                         <div class="rating-box pt-20">
-                            <ul class="rating rating-with-review-item">
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                <li class="review-item"><a href="#">Read Review</a></li>
-                                <li class="review-item"><a href="#">Write Review</a></li>
-                            </ul>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <ul class="rating user-rating" data-product-id="@Model.Product.Id">
+                                    @for (int i = 1; i <= 5; i++)
+                                    {
+                                        <li data-value="@i">
+                                            <i class="fa fa-star-o"></i>
+                                        </li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <div class="rating-box">
+                                    <ul class="avg-rating">
+                                        @for (int i = 1; i <= 5; i++)
+                                        {
+                                            if (i <= Math.Round(Model.AverageRating))
+                                            {
+                                                <li><i class="fa fa-star"></i></li>
+                                            }
+                                            else
+                                            {
+                                                <li><i class="fa fa-star-o"></i></li>
+                                            }
+                                        }
+                                    </ul>
+                                    <small>(@Model.TotalRatings ratings)</small>
+                                </div>
+                            }
                         </div>
                         <div class="price-box pt-20">
-                            <span class="new-price new-price-2">$@Model.Price</span>
+                            <span class="new-price new-price-2">$@Model.Product.Price</span>
                         </div>
                         <div class="product-desc">
                             <p>
@@ -47,7 +68,7 @@
 
                         <div class="single-add-to-cart">
                             <div class="cart-quantity" style="margin-bottom:10px;">
-                                <button style="cursor:pointer" class="add-to-cart" data-id="@Model.Id" data-name="@Model.Name" data-price="@Model.Price" >Add to cart</button>
+                                <button style="cursor:pointer" class="add-to-cart" data-id="@Model.Product.Id" data-name="@Model.Product.Name" data-price="@Model.Product.Price">Add to cart</button>
                             </div>
                         </div>
 
@@ -59,3 +80,20 @@
     </div>
 </div>
 <!-- content-wraper end -->
+
+
+<script>
+      $(document).ready(function () {
+        $('.user-rating li').click(function () {
+            let rating = $(this).data('value');
+            let productId = $('.user-rating').data('product-id');
+
+            $.post('/Product/Rate', {
+                productId: productId,
+                rating: rating
+            }, function () {
+                location.reload();
+            });
+        });
+    });
+</script>

@@ -1,12 +1,14 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using simple_ecommerce.Models;
+using System.Security.Claims;
 
 namespace simple_ecommerce.Controllers
 {
@@ -94,6 +96,16 @@ namespace simple_ecommerce.Controllers
             var products = await _productService.GetProductsAsync();    
 
             return Ok(products);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rate(int productId, int rating)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _productService.RateProduct(userId,productId,rating);
+
+            return Ok();
         }
     }
 }

@@ -1,4 +1,5 @@
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using ECommerce.Domain.Interfaces;
 using ECommerce.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -42,6 +43,28 @@ public class ProductRepository : IProductRepository
         if (product == null) return;
 
         _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task RateProduct(string userId, int productId, int rating)
+    {
+        var existing = await _context.ProductRatings
+            .FirstOrDefaultAsync(r => r.ProductId == productId && r.UserId == userId);
+
+        if (existing == null)
+        {
+            _context.ProductRatings.Add(new ProductRating
+            {
+                ProductId = productId,
+                UserId = userId,
+                Rating = rating
+            });
+        }
+        else
+        {
+            existing.Rating = rating;
+        }
+
         await _context.SaveChangesAsync();
     }
 }

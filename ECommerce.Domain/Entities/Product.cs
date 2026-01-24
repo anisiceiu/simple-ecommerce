@@ -1,4 +1,5 @@
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 namespace ECommerce.Domain;
@@ -28,4 +29,5 @@ public class Product
 
     // Navigation
     public Category Category { get; set; }
+    public ICollection<ProductRating> Ratings { get; set; }
 }
