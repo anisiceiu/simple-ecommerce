@@ -1,0 +1,15 @@
+﻿
+@using ECommerce.Domain
+@model List<Category>
+
+<select name="categories" class="nice-select select-search-category">
+    <option value="" selected="@(Context.Request.Query["categories"] == "" ? "selected" : "")">All</option>
+
+    @foreach (var cat in Model)
+    {
+        <option value="@cat.Id"
+                selected="@(Context.Request.Query["categories"] == cat.Id.ToString() ? "selected" : "")">
+            @cat.Name
+        </option>
+    }
+</select>

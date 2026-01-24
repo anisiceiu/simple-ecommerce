@@ -32,6 +32,7 @@ namespace simple_ecommerce.Controllers
 
         public async Task<IActionResult> Index(
                     List<int> categories = null,
+                    string search = "",
                     string sort = "",
                     int page = 1,
                     int pageSize = 5)
@@ -45,6 +46,10 @@ namespace simple_ecommerce.Controllers
 
             // 🔹 Start query (better if service returns IQueryable)
             var productsQuery = (await _productService.GetProductsAsync()).AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(search.ToLower()));
+
 
             // ✅ CATEGORY FILTER (MISSING PART)
             if (categories != null && categories.Any())
@@ -132,6 +137,11 @@ namespace simple_ecommerce.Controllers
         }
 
         public IActionResult OrderSuccess()
+        {
+            return View();
+        }
+
+        public IActionResult FAQ()
         {
             return View();
         }
