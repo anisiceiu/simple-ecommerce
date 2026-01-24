@@ -45,5 +45,10 @@ namespace ECommerce.Application.Services
             await _repo.DeleteAsync(id);
             return true;
         }
+
+        public async Task<IEnumerable<Order>> GetAllOrderForListAsync()
+        {
+            return await _repo.GetAllOrderForListAsync();
+        }
     }
 }

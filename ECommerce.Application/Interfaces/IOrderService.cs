@@ -15,6 +15,8 @@ namespace ECommerce.Application.Interfaces
         Task<Order> CreateAsync(Order order);
         Task<bool> UpdateStatusAsync(int id, string status);
         Task<bool> DeleteAsync(int id);
-        
+        Task<IEnumerable<Order>> GetAllOrderForListAsync();
+
+
     }
 }

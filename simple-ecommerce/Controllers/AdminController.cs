@@ -8,9 +8,11 @@ namespace simple_ecommerce.Controllers
     public class AdminController : Controller
     {
         private readonly IAuthService _authService;
-        public AdminController(IAuthService authService)
+        private readonly IOrderService _orderService;
+        public AdminController(IAuthService authService, IOrderService orderService)
         {
-              _authService = authService;  
+              _authService = authService;
+            _orderService = orderService;
         }
         public IActionResult Index()
         {
@@ -24,11 +26,29 @@ namespace simple_ecommerce.Controllers
             return View();
         }
 
+        public IActionResult Orders()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var orderDetails = await _orderService.GetByIdAsync(id);
+            return View(orderDetails);
+        }
+
         public async Task<IActionResult> GetAllCustomers()
         {
             var customers = await _authService.GetAllCustomersAsync();
 
             return Ok(customers);
+        }
+
+        public async Task<IActionResult> GetAllOrders()
+        {
+            var orders = await _orderService.GetAllOrderForListAsync();
+
+            return Ok(orders);
         }
     }
 }

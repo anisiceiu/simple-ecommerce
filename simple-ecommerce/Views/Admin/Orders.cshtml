@@ -1,0 +1,70 @@
+﻿@{
+    ViewData["Title"] = "orders";
+    Layout = "_LayoutAdmin";
+}
+
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="ordersTable" class="table table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>User ID</th>
+                       @*  <th>User Name</th> *@
+                        <th>Total Amount</th>
+                        <th>Status</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function() {
+        $('#ordersTable').DataTable({
+            ajax: {
+                url: '/Admin/GetAllOrders',
+                dataSrc: ''
+            },
+            columns: [
+                { 
+                    data: 'id',
+                    render: function(data, type, row) {
+                    // Create a link to the Order Details page
+                    return `<a href="/Admin/OrderDetails?id=${data}" class="btn-link">${data}</a>`;
+                    }
+                },
+                {
+                    data: 'user', // point to the whole user object
+                    render: function(data, type, row) {
+                        return data ? data.phoneNumber : ''; // access UserName safely
+                    }
+                },
+                // {
+                //     data: 'user', // point to the whole user object
+                //     render: function(data, type, row) {
+                //         return data ? data.userName : ''; // access UserName safely
+                //     }
+                // },
+                { data: 'totalAmount' },
+                { data: 'status' },
+                { data: 'createdAt',
+                  render: function(data) {
+                      return new Date(data).toLocaleDateString();
+                  }
+                }
+            ],
+            pageLength: 10,
+            responsive: true,
+            order: [[0, 'desc']]
+        });
+    });
+</script>

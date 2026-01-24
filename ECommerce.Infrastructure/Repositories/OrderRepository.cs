@@ -18,11 +18,19 @@ namespace ECommerce.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task<IEnumerable<Order>> GetAllOrderForListAsync()
+        {
+            return await _context.Orders
+                .Include(o => o.User)
+                .OrderByDescending(o => o.Id)
+                .ToListAsync();
+        }
         public async Task<IEnumerable<Order>> GetAllAsync()
         {
             return await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderItems)
+                .Include(o => o.ShippingAddress)
                 .OrderByDescending(o => o.CreatedAt)
                 .ToListAsync();
         }
@@ -32,6 +40,8 @@ namespace ECommerce.Infrastructure.Repositories
             return await _context.Orders
                 .Include(o => o.User)
                 .Include(o => o.OrderItems)
+                 .ThenInclude(oi => oi.Product)
+                .Include(o => o.ShippingAddress)
                 .FirstOrDefaultAsync(o => o.Id == id);
         }
 
