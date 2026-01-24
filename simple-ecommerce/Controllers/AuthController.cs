@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using simple_ecommerce.Models;
 using System.Security.Claims;
 
 namespace simple_ecommerce.Controllers
@@ -12,10 +13,14 @@ namespace simple_ecommerce.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
-
-        public AuthController(IAuthService authService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        public AuthController(IAuthService authService, UserManager<ApplicationUser> userManager,
+        SignInManager<ApplicationUser> signInManager)
         {
             _authService = authService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -115,5 +120,47 @@ namespace simple_ecommerce.Controllers
         }
 
         public IActionResult AccessDenied() => View();
+
+        // GET
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        public IActionResult Success()
+        {
+            return View();
+        }
+        // POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return RedirectToAction("Login");
+
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                model.CurrentPassword,
+                model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(model);
+            }
+
+            // refresh sign-in so user stays logged in
+            await _signInManager.RefreshSignInAsync(user);
+
+            TempData["Success"] = "Password changed successfully";
+            return RedirectToAction(nameof(Success));
+        }
     }
 }
