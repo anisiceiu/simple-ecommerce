@@ -80,7 +80,12 @@ namespace simple_ecommerce.Controllers
             return View(products);
         }
 
-
+        [Authorize]
+        public async Task<IActionResult> OrderDetails(int id)
+        {
+            var orderDetails = await _orderService.GetByIdAsync(id);
+            return View(orderDetails);
+        }
 
 
         public async Task<IActionResult> ProductDetails(int id)
@@ -171,6 +176,19 @@ namespace simple_ecommerce.Controllers
         {
             return HttpContext.Session.Get<List<CartItemViewModel>>(CartKey)
                    ?? new List<CartItemViewModel>();
+        }
+
+        [Authorize]
+        public async Task<IActionResult> MyOrders(int page = 1)
+        {
+            int pageSize = 5;
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var ordersQuery = _orderService.GetOrdersIQueryable(userId)
+                .AsNoTracking();
+
+            var orders = await PaginatedList<Order>.CreateAsync(ordersQuery, page, pageSize);
+
+            return View(orders);
         }
     }
 }

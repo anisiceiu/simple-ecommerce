@@ -1,0 +1,58 @@
+﻿@using ECommerce.Domain
+@model PaginatedList<Order>
+
+<div class="frequently-area pt-60 pb-50">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h2>My Orders</h2>
+
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            <tr>
+                                <td>@order.Id</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.Status</td>
+                                <td>@order.CreatedAt.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="@Url.Action("OrderDetails", "Home", new { id = order.Id })">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("MyOrders", new { page = Model.PageIndex - 1 })">Previous</a>
+                        </li>
+
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.PageIndex ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("MyOrders", new { page = i })">@i</a>
+                            </li>
+                        }
+
+                        <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                            <a class="page-link" href="@Url.Action("MyOrders", new { page = Model.PageIndex + 1 })">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+
+            </div>
+        </div>
+    </div>
+</div>

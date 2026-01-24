@@ -95,18 +95,7 @@
                                         </div>
                                     </li>
                                     <!-- Setting Area End Here -->
-                                    <!-- Begin Currency Area -->
-                                    <li>
-                                        <span class="currency-selector-wrapper">Currency :</span>
-                                        <div class="ht-currency-trigger"><span>USD $</span></div>
-                                        <div class="currency ht-currency">
-                                            <ul class="ht-setting-list">
-                                                <li><a href="#">EUR €</a></li>
-                                                <li class="active"><a href="#">USD $</a></li>
-                                            </ul>
-                                        </div>
-                                    </li>
-                                    <!-- Currency Area End Here -->
+
                                     <!-- Begin Language Area -->
                                     <li>
                                         @if(User.Identity?.IsAuthenticated == false)
@@ -196,6 +185,10 @@
                                          {
                                         <li><a href="/Admin/Index">Dashboard</a></li>
                                          }
+                                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Customer"))
+                                        {
+                                            <li><a href="/Home/MyOrders">My Orders</a></li>
+                                        }
                                     </ul>
                                 </nav>
                             </div>

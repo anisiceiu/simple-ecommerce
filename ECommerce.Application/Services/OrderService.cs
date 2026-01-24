@@ -50,5 +50,10 @@ namespace ECommerce.Application.Services
         {
             return await _repo.GetAllOrderForListAsync();
         }
+
+        public IQueryable<Order> GetOrdersIQueryable(string userId)
+        {
+           return _repo.GetOrdersIQueryable(userId);
+        }
     }
 }

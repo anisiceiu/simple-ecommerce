@@ -67,7 +67,7 @@ namespace simple_ecommerce.Controllers
         public async Task<IActionResult> Login(LoginDto dto, string returnUrl = null)
         {
             var user = await _authService.ValidateUserAsync(dto.Phone, dto.Password);
-            var roles = await _authService.GetRolesAsync(user);
+            
 
             if (user == null)
             {
@@ -75,6 +75,7 @@ namespace simple_ecommerce.Controllers
                 return View(dto);
             }
 
+            var roles = await _authService.GetRolesAsync(user);
             var claims = new List<Claim>
                                     {
                                         new Claim(ClaimTypes.Name, user.PhoneNumber),

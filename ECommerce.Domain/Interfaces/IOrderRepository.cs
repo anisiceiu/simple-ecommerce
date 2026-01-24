@@ -15,5 +15,6 @@ namespace ECommerce.Domain.Interfaces
         Task UpdateAsync(Order order);
         Task DeleteAsync(int id);
         Task<IEnumerable<Order>> GetAllOrderForListAsync();
+        IQueryable<Order> GetOrdersIQueryable(string userId);
     }
 }

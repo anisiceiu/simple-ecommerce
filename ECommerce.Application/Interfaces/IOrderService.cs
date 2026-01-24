@@ -16,6 +16,7 @@ namespace ECommerce.Application.Interfaces
         Task<bool> UpdateStatusAsync(int id, string status);
         Task<bool> DeleteAsync(int id);
         Task<IEnumerable<Order>> GetAllOrderForListAsync();
+        IQueryable<Order> GetOrdersIQueryable(string userId);
 
 
     }

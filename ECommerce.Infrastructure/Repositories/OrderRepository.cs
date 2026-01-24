@@ -18,6 +18,13 @@ namespace ECommerce.Infrastructure.Repositories
             _context = context;
         }
 
+        public IQueryable<Order> GetOrdersIQueryable(string userId)
+        {
+            return _context.Orders
+                .Include(o => o.User)                // Include related user
+                .Where(o => o.UserId == userId)      // Filter by logged-in user
+                .OrderByDescending(o => o.Id);
+        }
         public async Task<IEnumerable<Order>> GetAllOrderForListAsync()
         {
             return await _context.Orders
