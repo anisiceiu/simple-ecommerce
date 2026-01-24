@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,10 +15,12 @@ namespace simple_ecommerce.Controllers
     {
         private readonly IProductService _productService;
         private readonly ICategoryService _CategoryService;
-        public ProductController(IProductService productService, ICategoryService categoriesService)
+        private readonly IWebHostEnvironment _env;
+        public ProductController(IProductService productService, ICategoryService categoriesService, IWebHostEnvironment env)
         {
           _productService = productService;
             _CategoryService = categoriesService;
+            _env = env;
         }
 
         public async Task<IActionResult> Create()
@@ -44,6 +47,10 @@ namespace simple_ecommerce.Controllers
         {
             if (ModelState.IsValid)
             {
+                var imageUrl = await SaveImage(vm.Product.Image);
+
+                vm.Product.ImageUrl = imageUrl;
+
                 vm.Product.CreatedAt = DateTime.Now;
 
                 await _productService.CreateAsync(vm.Product);
@@ -61,6 +68,21 @@ namespace simple_ecommerce.Controllers
                                   }).ToList();
 
             return View(vm);
+        }
+        private async Task<string> SaveImage(IFormFile file)
+        {
+            if (file == null) return string.Empty;
+
+            var uploads = Path.Combine(_env.WebRootPath, "images/Products");
+            Directory.CreateDirectory(uploads);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(uploads, fileName);
+
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await file.CopyToAsync(stream);
+
+            return $"{fileName}";
         }
         public IActionResult Index()
         {

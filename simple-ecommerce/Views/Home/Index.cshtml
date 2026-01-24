@@ -57,7 +57,9 @@
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
                                                     <a href="/Home/ProductDetails?id=@item.Id">
-                                                        <img src="/images/product/large-size/1.jpg" alt="Li's Product Image">
+                                                        @* <img src="/images/product/large-size/1.jpg" alt="Li's Product Image"> *@
+                                                        <img src="/images/products/@item.ImageUrl" alt="Li's Product Image">
+
                                                     </a>
                                                     <span class="sticker">New</span>
                                                 </div>
