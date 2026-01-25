@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------------
+﻿/*-----------------------------------------------------------------------------------
 		Template Name: limupa - Digital Products Store ECommerce Bootstrap 4 Template
 		Template URI: http://bootexperts.com
 		Description: This is digital products store html5 template for eCommerce websites, nice and clean design;
@@ -5473,3 +5473,16 @@ span.required {
 	font-size: 14px;
 	color: #555;
 }
+.product-image {
+	width: 100%;
+	height: 260px; /* 🔥 fixed card image height */
+	overflow: hidden;
+	position: relative;
+}
+
+	.product-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover; /* 🔥 keeps aspect ratio */
+		display: block;
+	}
