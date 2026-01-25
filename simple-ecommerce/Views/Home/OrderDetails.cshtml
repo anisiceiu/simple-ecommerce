@@ -1,4 +1,5 @@
-﻿@model ECommerce.Domain.Order
+﻿@using ECommerce.Domain
+@model ECommerce.Domain.Order
 
 @{
     ViewBag.Title = "Order Details";
@@ -23,6 +24,16 @@
                             @Model.Status
                         </span>
                     </p>
+                    @if (Model.Status == OrderStatuses.Pending)
+                    {
+                        <p>
+                            <form asp-action="UpdateOrderStatus" asp-controller="Home" method="post">
+                                <input type="hidden" name="orderId" value="@Model.Id" />
+                                <input type="hidden" name="status" value="Cancelled" />
+                                <button type="submit" class="btn btn-danger">Cancel Order</button>
+                            </form>
+                        </p>
+                    }
                 </div>
                 <div class="col-md-6">
                     <h5>Shipping Address</h5>

@@ -148,6 +148,27 @@ namespace simple_ecommerce.Controllers
             return RedirectToAction("OrderSuccess");
         }
 
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> UpdateOrderStatus(int orderId, string status)
+        {
+            var order = await _orderService.GetByIdAsync(orderId);
+
+            if (order == null)
+                return NotFound();
+
+            if (order.Status == OrderStatuses.Pending)
+            {
+                await _orderService.UpdateStatusAsync(orderId, status);
+
+                return RedirectToAction("OrderDetails", new { id = orderId });
+            }
+            else
+            {
+                return RedirectToAction("OrderDetails", new { id = orderId });
+            }
+        }
+
         public IActionResult OrderSuccess()
         {
             return View();
