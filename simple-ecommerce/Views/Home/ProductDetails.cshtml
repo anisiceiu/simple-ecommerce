@@ -1,5 +1,5 @@
-﻿@using ECommerce.Application.DTOs
-@model ProductDto
+﻿@using simple_ecommerce.Models
+@model ProductDetailsVM
 <!-- content-wraper start -->
 <div class="content-wraper">
     <div class="container">
@@ -10,7 +10,7 @@
                     <div class="product-details-images slider-navigation-1">
                         <div class="lg-image">
 @*                             <a class="popup-img venobox vbox-item" href="images/product/large-size/1.jpg" data-gall="myGallery"> *@
-                            <img src="/images/products/@Model.ImageUrl" alt="product image">
+                            <img src="/images/products/@Model.Product.ImageUrl" alt="product image">
 @*                             </a> *@
                         </div>
 
@@ -21,42 +21,28 @@
             <div class="col-lg-7 col-md-6">
                 <div class="product-details-view-content pt-60">
                     <div class="product-info">
-                        <h2>@Model.Name</h2>
+                        <h2>@Model.Product.Name</h2>
                         <span class="product-details-ref">Reference: demo_15</span>
-                       @*  <div class="rating-box pt-20">
-                            @if (User.Identity.IsAuthenticated)
-                            {
-                                <ul class="rating user-rating" data-product-id="@Model.Id">
-                                    @for (int i = 1; i <= 5; i++)
-                                    {
-                                        <li data-value="@i">
-                                            <i class="fa fa-star-o"></i>
-                                        </li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <div class="rating-box">
-                                    <ul class="avg-rating">
-                                        @for (int i = 1; i <= 5; i++)
-                                        {
-                                            if (i <= Math.Round(Model.AverageRating))
-                                            {
-                                                <li><i class="fa fa-star"></i></li>
-                                            }
-                                            else
-                                            {
-                                                <li><i class="fa fa-star-o"></i></li>
-                                            }
-                                        }
-                                    </ul>
-                                    <small>(@Model.TotalRatings ratings)</small>
-                                </div>
-                            }
-                        </div> *@
+                        <div class="rating-wrapper"
+                             data-product-id="@Model.Product.Id"
+                             data-user-rating="@Model.UserRating"
+                             data-average-rating="@Model.AverageRating">
+
+                            <ul class="star-rating user-rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    <li data-value="@i">&#9733;</li>
+                                }
+                            </ul>
+
+                            <div class="avg-rating">
+                                Average Rating:
+                                <span>@Model.AverageRating.ToString("0.0")</span>
+                            </div>
+                        </div>
+
                         <div class="price-box pt-20">
-                            <span class="new-price new-price-2">$@Model.Price</span>
+                            <span class="new-price new-price-2">$@Model.Product.Price</span>
                         </div>
                         <div class="product-desc">
                             <p>
@@ -68,7 +54,7 @@
 
                         <div class="single-add-to-cart">
                             <div class="cart-quantity" style="margin-bottom:10px;">
-                                <button style="cursor:pointer" class="add-to-cart" data-id="@Model.Id" data-name="@Model.Name" data-price="@Model.Price">Add to cart</button>
+                                <button style="cursor:pointer" class="add-to-cart" data-id="@Model.Product.Id" data-name="@Model.Product.Name" data-price="@Model.Product.Price">Add to cart</button>
                             </div>
                         </div>
 
@@ -83,15 +69,45 @@
 
 
 <script>
-      $(document).ready(function () {
+
+
+    $(document).ready(function () {
+
+        function fillStars(container, rating, className) {
+            container.find('li').each(function () {
+                let value = $(this).data('value');
+                $(this).toggleClass(className, value <= rating);
+            });
+        }
+
+        $('.rating-wrapper').each(function () {
+            let wrapper = $(this);
+            let userRating = wrapper.data('user-rating');
+            let avgRating = wrapper.data('average-rating');
+
+            fillStars(wrapper.find('.user-rating'), userRating, 'selected');
+            fillStars(wrapper.find('.user-rating'), avgRating, 'avg');
+        });
+
+        $('.user-rating li').hover(
+            function () {
+                let rating = $(this).data('value');
+                fillStars($(this).parent(), rating, 'hover');
+            },
+            function () {
+                $(this).parent().find('li').removeClass('hover');
+            }
+        );
+
         $('.user-rating li').click(function () {
             let rating = $(this).data('value');
-            let productId = $('.user-rating').data('product-id');
+            let wrapper = $(this).closest('.rating-wrapper');
+            let productId = wrapper.data('product-id');
 
-            $.post('/Product/Rate', {
+            $.post('/Home/Rate', {
                 productId: productId,
                 rating: rating
-            }, function () {
+            }).done(function () {
                 location.reload();
             });
         });

@@ -29,5 +29,5 @@ public class Product
 
     // Navigation
     public Category Category { get; set; }
-    //public ICollection<ProductRating> Ratings { get; set; }
+    public ICollection<ProductRating>? Ratings { get; set; }
 }

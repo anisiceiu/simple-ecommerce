@@ -90,18 +90,30 @@ namespace simple_ecommerce.Controllers
 
         public async Task<IActionResult> ProductDetails(int id)
         {
-            var products = await _productService.GetProductsAsync();
+            var product = await _productService.GetByIdAsync(id);
 
-            var product = products.FirstOrDefault(c => c.Id == id);
-            //var ratings = product.Ratings ?? new List<ProductRating>();
-
-            //var vm = new ProductDetailsVM
-            //{
-            //    Product = product,
-            //    AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0,
-            //    TotalRatings = ratings.Count()
-            //};
-            return View(product);
+            var ratings = product.Ratings ?? new List<ProductRating>();
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var vm = new ProductDetailsVM
+            {
+                Product = new ProductDto { 
+                 CategoryId = product.CategoryId,
+                  CreatedAt = product.CreatedAt,
+                   Description = product.Description,
+                    Id = product.Id,
+                     ImageUrl = product.ImageUrl,
+                      IsActive = product.IsActive,
+                       Price = product.Price,
+                        Name = product.Name,
+                         Stock= product.Stock
+                         
+                },
+                AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0,
+                UserRating = product.Ratings
+            .FirstOrDefault(r => r.UserId == userId)?.Rating ?? 0,
+                TotalRatings = ratings.Count()
+            };
+            return View(vm);
         }
 
         [Authorize]
@@ -217,6 +229,16 @@ namespace simple_ecommerce.Controllers
             var orders = await PaginatedList<Order>.CreateAsync(ordersQuery, page, pageSize);
 
             return View(orders);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Rate(int productId, int rating)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            await _productService.RateProduct(userId, productId, rating);
+
+            return Ok();
         }
     }
 }

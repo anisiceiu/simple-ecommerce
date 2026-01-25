@@ -28,7 +28,7 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByIdAsync(int id)
     {
         return await _context.Products
-            .Include(p => p.Category)//.Include(o=>o.Ratings)
+            .Include(p => p.Category).Include(o=>o.Ratings)
             .FirstOrDefaultAsync(p => p.Id == id);
     }
     public async Task UpdateAsync(Product product)

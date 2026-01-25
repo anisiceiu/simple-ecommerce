@@ -5438,57 +5438,38 @@ span.required {
 /*----------------------------------------------------------------------------------------------------*/
 /*------------------------------------------> The End <-----------------------------------------------*/
 /*----------------------------------------------------------------------------------------------------*/
-.user-rating {
+.star-rating {
 	list-style: none;
 	padding: 0;
 	margin: 0;
-	display: flex;
-	gap: 6px;
+	display: inline-flex;
 }
 
-	.user-rating li {
-		font-size: 24px;
-		color: #ccc; /* empty star */
+	.star-rating li {
+		font-size: 28px;
+		color: #ccc;
 		cursor: pointer;
 		transition: color 0.2s ease;
+		margin-right: 5px;
 	}
 
-		.user-rating li:hover,
-		.user-rating li.hovered {
-			color: #f5c518; /* gold */
+		/* User selected rating */
+		.star-rating li.selected {
+			color: #ffc107;
 		}
 
-.user-rating {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	display: flex;
-	gap: 8px;
-}
+		/* Hover effect */
+		.star-rating li.hover {
+			color: #ffdb70;
+		}
 
-	.user-rating li i {
-		color: #ccc !important;
-		font-size: 26px !important;
-		cursor: pointer !important;
-	}
+		/* Average rating (background fill) */
+		.star-rating li.avg {
+			color: #ffb400;
+		}
 
-	.user-rating li.hovered i,
-	.user-rating li.selected i {
-		color: #f5c518 !important;
-	}
 .avg-rating {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-	display: flex;
-	gap: 4px;
+	margin-top: 8px;
+	font-size: 14px;
+	color: #555;
 }
-
-	.avg-rating li i.fa-star {
-		color: #f5c518; /* filled */
-		font-size: 18px;
-	}
-
-	.avg-rating li i.fa-star-o {
-		color: #ccc; /* empty */
-	}

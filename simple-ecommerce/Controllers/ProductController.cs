@@ -98,14 +98,6 @@ namespace simple_ecommerce.Controllers
             return Ok(products);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Rate(int productId, int rating)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            await _productService.RateProduct(userId,productId,rating);
-
-            return Ok();
-        }
     }
 }
