@@ -205,7 +205,7 @@
                                         <li><a href="/Home/About">About Us</a></li>
                                         <li><a href="/Home/ContactUs">Contact</a></li>
                                         <li><a href="/Home/FAQ">FAQ</a></li>
-                                        <li><a href="/Chat/Index">Chat with Support</a></li>
+                                        
                                          @if(User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                                          {
                                         <li><a href="/Admin/Index">Dashboard</a></li>
@@ -213,6 +213,7 @@
                                         @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Customer"))
                                         {
                                             <li><a href="/Home/MyOrders">My Orders</a></li>
+                                            <li><a href="/Chat/Index">Chat with Support</a></li>
                                         }
                                     </ul>
                                 </nav>
