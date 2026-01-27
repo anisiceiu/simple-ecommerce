@@ -1,0 +1,80 @@
+﻿@using System.Security.Claims
+@model List<ECommerce.Domain.Entities.ChatRoom>
+
+@{
+    ViewBag.Title = "Admin Chat Center";
+    Layout = "_LayoutAdmin";
+}
+
+<h2>Customer Chats</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">
+        No active chats yet.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th>User</th>
+                <th>Last Message</th>
+                <th>Unread Messages</th>
+                <th>Created At</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var chat in Model)
+            {
+                var lastMessage = chat.Messages?.OrderByDescending(m => m.SentAt).FirstOrDefault();
+                var unreadCount = chat.Messages?.Count(m => !m.IsRead && m.SenderId != User.FindFirstValue(System.Security.Claims.ClaimTypes.NameIdentifier)) ?? 0;
+
+                <tr>
+                    <td>@chat.UserId</td>
+                    <td>@(lastMessage != null ? lastMessage.MessageText : "No messages yet")</td>
+                    <td>
+                        @if (unreadCount > 0)
+                        {
+                            <span class="badge badge-danger">@unreadCount</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">0</span>
+                        }
+                    </td>
+                    <td>@chat.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" href="/AdminChat/Open/@chat.Id">
+                            Open Chat
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
+    <script>
+        // Setup SignalR connection
+            if (typeof connection === "undefined") {
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/chatHub")
+            .build();
+    }
+
+        connection.start().then(() => console.log("SignalR connected"));
+
+        // Listen for new messages
+        connection.on("NewChatNotification", (roomId, message) => {
+            // Optionally refresh page or update table dynamically
+            console.log("New message in chat room " + roomId + ": " + message);
+
+            // Example: simple alert (can be replaced with dynamic badge/table update)
+            alert("New message from user in room " + roomId + ": " + message);
+        });
+    </script>
+

@@ -105,8 +105,8 @@ namespace simple_ecommerce
 
             app.UseAuthentication();
             app.UseAuthorization();
-            
 
+            app.MapHub<ChatHub>("/chatHub");
             app.MapHub<AdminNotificationHub>("/adminHub");
 
             app.MapControllerRoute(
