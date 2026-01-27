@@ -4,7 +4,9 @@
 @inject IHttpContextAccessor HttpContextAccessor
 
 @using Microsoft.AspNetCore.Mvc.Localization
-@inject IViewLocalizer Localizer
+@using Microsoft.Extensions.Localization
+@using simple_ecommerce.Resources
+@inject IHtmlLocalizer<SharedResource> Localizer
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -70,7 +72,7 @@
                         <div class="col-lg-3 col-md-4">
                             <div class="header-top-left">
                                 <ul class="phone-wrap">
-                                    <li><span>@Localizer["TelephoneEnquiry"]:</span><a href="#">(+123) 123 321 345</a></li>
+                                    <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -100,15 +102,15 @@
                                         </div>
                                     </li>
                                     <!-- Setting Area End Here -->
-                                    <li>
+                                   @*  <li>
                                         <div class="ht-setting-trigger"><span>Language</span></div>
                                         <div class="setting ht-setting">
                                             <ul class="ht-setting-list">
-                                                <li><a href="/Language/SetLanguage?culture=en">EN</a></li>
-                                                <li><a href="/Language/SetLanguage?culture=bn">BN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=en-US">EN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=bn-BD">BN</a></li>
                                             </ul>
                                         </div>
-                                    </li>
+                                    </li> *@
                                     <!-- Begin Language Area -->
                                     <li>
                                         @if(User.Identity?.IsAuthenticated == false)
@@ -230,7 +232,8 @@
             <!-- Mobile Menu Area End Here -->
         </header>
         <!-- Header Area End Here --> 
-
+@*         <p>UICulture: @System.Globalization.CultureInfo.CurrentUICulture.Name</p>
+        <p>TelephoneEnquiry: @Localizer["TelephoneEnquiry"]</p> *@
         @RenderBody()
         <input type="hidden" id="customerRoomId" />
         <!-- Floating button -->

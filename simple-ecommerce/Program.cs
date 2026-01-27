@@ -108,11 +108,7 @@ namespace simple_ecommerce
             }
 
 
-            var supportedCultures = new[]
-                {
-                    new CultureInfo("en"),
-                    new CultureInfo("bn")
-                };
+            var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("bn") };
 
             var localizationOptions = new RequestLocalizationOptions
             {
@@ -121,7 +117,7 @@ namespace simple_ecommerce
                 SupportedUICultures = supportedCultures,
                 RequestCultureProviders = new IRequestCultureProvider[]
                 {
-                    new CookieRequestCultureProvider()
+        new CookieRequestCultureProvider()
                 }
             };
 
@@ -130,8 +126,10 @@ namespace simple_ecommerce
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
-            app.UseRouting();
+
             app.UseRequestLocalization(localizationOptions);
+            app.UseRouting();
+            
 
 
             app.UseAuthentication();
