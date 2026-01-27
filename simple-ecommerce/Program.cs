@@ -6,6 +6,7 @@ using ECommerce.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using simple_ecommerce.Hubs;
 
 namespace simple_ecommerce
 {
@@ -84,6 +85,7 @@ namespace simple_ecommerce
             });
 
             builder.Services.AddAuthorization();
+            builder.Services.AddSignalR();
 
             var app = builder.Build();
             // 🔹 Seed Identity data
@@ -103,6 +105,9 @@ namespace simple_ecommerce
 
             app.UseAuthentication();
             app.UseAuthorization();
+            
+
+            app.MapHub<AdminNotificationHub>("/adminHub");
 
             app.MapControllerRoute(
                 name: "default",

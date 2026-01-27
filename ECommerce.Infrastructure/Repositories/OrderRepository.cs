@@ -18,6 +18,16 @@ namespace ECommerce.Infrastructure.Repositories
             _context = context;
         }
 
+        public async Task MakeUnseenOrdersSeen()
+        {
+
+            var unseenOrders = _context.Orders
+            .Where(o => !o.IsSeenByAdmin)
+            .ToList();
+
+            unseenOrders.ForEach(o => o.IsSeenByAdmin = true);
+            _context.SaveChanges();
+        }
         public IQueryable<Order> GetOrdersIQueryable(string userId)
         {
             return _context.Orders

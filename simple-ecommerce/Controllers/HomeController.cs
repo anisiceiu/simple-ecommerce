@@ -4,7 +4,9 @@ using ECommerce.Domain;
 using ECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using simple_ecommerce.Hubs;
 using simple_ecommerce.Models;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -19,15 +21,18 @@ namespace simple_ecommerce.Controllers
         private readonly IOrderService _orderService;
         private readonly IOrderItemService _orderItemService;
         private readonly ICategoryService _categoryService;
+        private readonly IHubContext<AdminNotificationHub> _hub;
+
 
         public HomeController(ILogger<HomeController> logger, IProductService productService,
-            IOrderService orderService, IOrderItemService orderItemService, ICategoryService categoryService)
+            IOrderService orderService, IOrderItemService orderItemService, ICategoryService categoryService, IHubContext<AdminNotificationHub> hub)
         {
             _logger = logger;
             _productService = productService;
             _orderService = orderService;
             _orderItemService = orderItemService;
             _categoryService = categoryService;
+            _hub = hub;
         }
 
         public async Task<IActionResult> Index(
@@ -156,6 +161,9 @@ namespace simple_ecommerce.Controllers
 
             //clear cart
             HttpContext.Session.Remove(CartKey);
+            await _hub.Clients.Group("Admins")
+                        .SendAsync("NewOrderPlaced");
+
 
             return RedirectToAction("OrderSuccess");
         }
@@ -205,6 +213,7 @@ namespace simple_ecommerce.Controllers
         {
             return View();
         }
+
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

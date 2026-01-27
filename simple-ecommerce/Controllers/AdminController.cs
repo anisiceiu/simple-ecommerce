@@ -40,6 +40,7 @@ namespace simple_ecommerce.Controllers
 
         public IActionResult Orders()
         {
+            _orderService.MakeUnseenOrdersSeen();
             return View();
         }
 
@@ -62,5 +63,11 @@ namespace simple_ecommerce.Controllers
 
             return Ok(orders);
         }
+
+        public IActionResult AlertPartial()
+        {
+            return ViewComponent("AdminAlert");
+        }
+
     }
 }

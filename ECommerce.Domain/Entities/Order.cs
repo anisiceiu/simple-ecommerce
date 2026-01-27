@@ -12,7 +12,7 @@ public class Order
     public decimal TotalAmount { get; set; }
 
     public string Status { get; set; } // Pending, Confirmed, Cancelled
-
+    public bool IsSeenByAdmin { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public OrderAddress ShippingAddress { get; set; }
     // Navigation

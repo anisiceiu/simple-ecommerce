@@ -55,5 +55,10 @@ namespace ECommerce.Application.Services
         {
            return _repo.GetOrdersIQueryable(userId);
         }
+
+        public async Task MakeUnseenOrdersSeen()
+        {
+           await _repo.MakeUnseenOrdersSeen();
+        }
     }
 }
