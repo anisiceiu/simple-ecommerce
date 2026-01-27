@@ -16,7 +16,31 @@ namespace simple_ecommerce.Controllers
         {
             _context = context;
         }
+        [HttpPost]
+        [Route("api/Chat/CreateOrGetRoom")]
+        public IActionResult CreateOrGetRoom()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Check if a room already exists
+            var room = _context.ChatRooms
+                .Include(r => r.Messages)
+                .FirstOrDefault(r => r.UserId == userId);
+
+            if (room == null)
+            {
+                // Create new room
+                room = new ChatRoom
+                {
+                    UserId = userId,
+                    CreatedAt = DateTime.Now
+                };
+                _context.ChatRooms.Add(room);
+                _context.SaveChanges();
+            }
+
+            return Ok(new { roomId = room.Id });
+        }
         public IActionResult Index()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);

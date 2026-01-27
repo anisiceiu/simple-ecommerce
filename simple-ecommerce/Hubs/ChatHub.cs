@@ -24,32 +24,39 @@
 
         public async Task SendMessage(string roomId, string message)
         {
+            if (!int.TryParse(roomId, out int roomIdInt))
+                throw new Exception("Invalid roomId");
+
             var userId = Context.UserIdentifier;
+            if (string.IsNullOrEmpty(userId))
+                throw new Exception("UserIdentifier is null");
+
+            // Ensure sender joins the group
+            await Groups.AddToGroupAsync(Context.ConnectionId, roomIdInt.ToString());
 
             // Save message
             var msg = new Message
             {
-                ChatRoomId = int.Parse(roomId),
+                ChatRoomId = roomIdInt,
                 SenderId = userId,
                 MessageText = message,
-                IsRead = false
+                IsRead = false,
+                SentAt = DateTime.Now
             };
             _context.Messages.Add(msg);
             await _context.SaveChangesAsync();
 
-            // Send to chat room group (user + admin in that room)
-            await Clients.Group(roomId).SendAsync("ReceiveMessage", userId, message, msg.SentAt.ToString("HH:mm"));
+            // Send to chat room group (customer + admin)
+            await Clients.Group(roomIdInt.ToString())
+                .SendAsync("ReceiveMessage", userId, message, msg.SentAt.ToString("HH:mm"));
 
             // Notify admin if AdminId exists
-            var room = _context.ChatRooms.FirstOrDefault(r => r.Id == int.Parse(roomId));
-
+            var room = _context.ChatRooms.FirstOrDefault(r => r.Id == roomIdInt);
             if (room != null)
             {
-                // Assign AdminId if null (first admin opening the chat)
                 if (string.IsNullOrEmpty(room.AdminId))
                 {
-                    // Get first user in "Admin" role
-                    var admins = await _userManager.GetUsersInRoleAsync("Admin"); // synchronous for demo
+                    var admins = await _userManager.GetUsersInRoleAsync("Admin");
                     var firstAdmin = admins.FirstOrDefault();
                     if (firstAdmin != null)
                     {
@@ -60,10 +67,12 @@
 
                 if (!string.IsNullOrEmpty(room.AdminId) && room.AdminId != userId)
                 {
-                    await Clients.User(room.AdminId).SendAsync("NewChatNotification", roomId, message);
+                    await Clients.User(room.AdminId)
+                        .SendAsync("NewChatNotification", roomIdInt.ToString(), message);
                 }
             }
         }
+
 
     }
 
