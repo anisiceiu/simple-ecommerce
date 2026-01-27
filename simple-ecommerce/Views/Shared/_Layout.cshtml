@@ -2,23 +2,8 @@
 @using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
 
-@{
-    var cartJson = HttpContextAccessor.HttpContext?
-        .Session.GetString("CART");
-
-    var cart = string.IsNullOrEmpty(cartJson)
-        ? new List<CartItemViewModel>()
-        : JsonSerializer.Deserialize<List<CartItemViewModel>>(cartJson);
-
-    var totalItems = cart.Sum(x => x.Quantity);
-    var totalAmount = cart.Sum(x => x.Price * x.Quantity);
-
-    var myCartModel = new CartSummaryViewModel
-    {
-        Count = totalItems,
-        Total = totalAmount
-    };
-}
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -84,7 +69,7 @@
                         <div class="col-lg-3 col-md-4">
                             <div class="header-top-left">
                                 <ul class="phone-wrap">
-                                    <li><span>Telephone Enquiry:</span><a href="#">(+123) 123 321 345</a></li>
+                                    <li><span>@Localizer["TelephoneEnquiry"]:</span><a href="#">(+123) 123 321 345</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -114,7 +99,15 @@
                                         </div>
                                     </li>
                                     <!-- Setting Area End Here -->
-
+                                    <li>
+                                        <div class="ht-setting-trigger"><span>Language</span></div>
+                                        <div class="setting ht-setting">
+                                            <ul class="ht-setting-list">
+                                                <li><a href="/Language/SetLanguage?culture=en">EN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=bn">BN</a></li>
+                                            </ul>
+                                        </div>
+                                    </li>
                                     <!-- Begin Language Area -->
                                     <li>
                                         @if(User.Identity?.IsAuthenticated == false)
@@ -235,7 +228,13 @@
             </div>
             <!-- Mobile Menu Area End Here -->
         </header>
-        <!-- Header Area End Here -->        
+        <!-- Header Area End Here --> 
+        @using System.Globalization
+
+        <p>
+            Culture: @CultureInfo.CurrentCulture.Name <br />
+            UI Culture: @CultureInfo.CurrentUICulture.Name
+        </p>
         @RenderBody()
         <div class="footer">
             <!-- Begin Footer Static Middle Area -->

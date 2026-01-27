@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using simple_ecommerce.Hubs;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace simple_ecommerce
 {
@@ -34,7 +36,14 @@ namespace simple_ecommerce
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddLocalization(options =>
+            {
+                options.ResourcesPath = "Resources";
+            });
+
+            builder.Services.AddControllersWithViews()
+                .AddViewLocalization()
+                .AddDataAnnotationsLocalization();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -98,10 +107,32 @@ namespace simple_ecommerce
                 app.UseHsts();
             }
 
+
+            var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("bn")
+                };
+
+            var localizationOptions = new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures,
+                RequestCultureProviders = new IRequestCultureProvider[]
+                {
+                    new CookieRequestCultureProvider()
+                }
+            };
+
+
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();
+            app.UseRequestLocalization(localizationOptions);
+
 
             app.UseAuthentication();
             app.UseAuthorization();
