@@ -57,24 +57,3 @@ else
     </table>
 }
 
-
-    <script>
-        // Setup SignalR connection
-            if (typeof connection === "undefined") {
-        const connection = new signalR.HubConnectionBuilder()
-            .withUrl("/chatHub")
-            .build();
-    }
-
-        connection.start().then(() => console.log("SignalR connected"));
-
-        // Listen for new messages
-        connection.on("NewChatNotification", (roomId, message) => {
-            // Optionally refresh page or update table dynamically
-            console.log("New message in chat room " + roomId + ": " + message);
-
-            // Example: simple alert (can be replaced with dynamic badge/table update)
-            alert("New message from user in room " + roomId + ": " + message);
-        });
-    </script>
-
