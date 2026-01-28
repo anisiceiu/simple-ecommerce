@@ -117,7 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AboutUs" xml:space="preserve">
+    <value>আমাদের সম্পর্কে</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>পাসওয়ার্ড পরিবর্তন</value>
+  </data>
+  <data name="ChatwithSupport" xml:space="preserve">
+    <value>সহায়তার সাথে চ্যাট করুন</value>
+  </data>
+  <data name="Contact" xml:space="preserve">
+    <value>যোগাযোগ</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>ড্যাশবোর্ড</value>
+  </data>
+  <data name="FAQ" xml:space="preserve">
+    <value>সাধারণ জিজ্ঞাসা</value>
+  </data>
+  <data name="Guest" xml:space="preserve">
+    <value>অতিথি</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>হোম</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>ভাষা</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>আমার অ্যাকাউন্ট</value>
+  </data>
+  <data name="MyOrders" xml:space="preserve">
+    <value>আমার অর্ডারসমূহ</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>নিবন্ধন করুন</value>
+  </data>
+  <data name="Searchproduct" xml:space="preserve">
+    <value>পণ্য খুঁজুন ...</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>সেটিং</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>সাইন ইন</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>সাইন আউট</value>
+  </data>
   <data name="str_welcome_message" xml:space="preserve">
     <value>ফরাসি ভাষায় স্বাগতম</value>
+  </data>
+  <data name="TelephoneEnquiry" xml:space="preserve">
+    <value>টেলিফোন অনুসন্ধান</value>
   </data>
 </root>
