@@ -90,12 +90,12 @@
                                                 
                                                 @if (User.Identity?.IsAuthenticated == true)
                                                 {
-                                                    <li><a href="/auth/ChangePassword">Change Password</a></li>
-                                                    <li><a href="/auth/Logout">Sign Out</a></li>
+                                                    <li><a href="/auth/ChangePassword">@Localizer["ChangePassword"]</a></li>
+                                                    <li><a href="/auth/Logout">@Localizer["SignOut"]</a></li>
                                                 }
                                                 else
                                                 {
-                                                    <li><a href="/Auth/Login">Sign In</a></li>
+                                                    <li><a href="/Auth/Login">@Localizer["SignIn"]</a></li>
                                                 }
                                                 
                                             </ul>
@@ -103,11 +103,11 @@
                                     </li>
                                     <!-- Setting Area End Here -->
                                     <li>
-                                        <div class="ht-setting-trigger"><span>Language</span></div>
+                                        <div class="ht-setting-trigger"><span>@Localizer["Language"]</span></div>
                                         <div class="setting ht-setting">
                                             <ul class="ht-setting-list">
-                                                <li><a href="/Language/SetLanguage?culture=en">EN</a></li>
-                                                <li><a href="/Language/SetLanguage?culture=bn">BN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=en">English</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=bn">বাংলা</a></li>
                                             </ul>
                                         </div>
                                     </li>
@@ -115,11 +115,11 @@
                                     <li>
                                         @if(User.Identity?.IsAuthenticated == false)
                                          {
-                                            <a style="text-decoration: none;color: black;font-weight: 100;" asp-controller="Auth" asp-action="Register">Register</a>
+                                            <a style="text-decoration: none;color: black;font-weight: 100;" asp-controller="Auth" asp-action="Register">@Localizer["Register"]</a>
                                         }
                                         else
                                         {
-                                            <a href="#">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : "Guest")</a>
+                                            <a href="#">@(User.Identity?.IsAuthenticated == true ? User.Identity.Name : @Localizer["Guest"])</a>
                                         }
                                     </li>
                                     <!-- Language Area End Here -->
@@ -154,7 +154,7 @@
 
                                 <input type="text"
                                        name="search"
-                                       placeholder="Search product ..."
+                                       placeholder="@Localizer["Searchproduct"]"
                                        value="@Context.Request.Query["search"]" />
 
                                 <button class="li-btn" type="submit">
@@ -195,21 +195,21 @@
                                 <nav>
                                     <ul>
                                         <li>
-                                            <a href="/">Home</a>
+                                            <a href="/">@Localizer["Home"]</a>
                                         </li>
                               
-                                        <li><a href="/Home/About">About Us</a></li>
-                                        <li><a href="/Home/ContactUs">Contact</a></li>
-                                        <li><a href="/Home/FAQ">FAQ</a></li>
+                                        <li><a href="/Home/About">@Localizer["AboutUs"]</a></li>
+                                        <li><a href="/Home/ContactUs">@Localizer["Contact"]</a></li>
+                                        <li><a href="/Home/FAQ">@Localizer["FAQ"]</a></li>
                                         
                                          @if(User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
                                          {
-                                        <li><a href="/Admin/Index">Dashboard</a></li>
+                                        <li><a href="/Admin/Index">@Localizer["Dashboard"]</a></li>
                                          }
                                         @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Customer"))
                                         {
-                                            <li><a href="/Home/MyOrders">My Orders</a></li>
-                                            <li><a href="/Chat/Index">Chat with Support</a></li>
+                                            <li><a href="/Home/MyOrders">@Localizer["MyOrders"]</a></li>
+                                            <li><a href="/Chat/Index">@Localizer["ChatwithSupport"]</a></li>
                                         }
                                     </ul>
                                 </nav>
