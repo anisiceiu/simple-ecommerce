@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     public class LanguageController : Controller
     {

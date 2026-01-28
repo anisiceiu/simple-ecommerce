@@ -2,7 +2,7 @@
 using ECommerce.Domain;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace simple_ecommerce.Models
+namespace ecommerce.Models
 {
     public class ProductCreateVM
     {

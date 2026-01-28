@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class AdminController : Controller

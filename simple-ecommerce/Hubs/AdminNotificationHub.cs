@@ -1,4 +1,4 @@
-﻿namespace simple_ecommerce.Hubs
+﻿namespace ecommerce.Hubs
 {
     using Microsoft.AspNetCore.SignalR;
 

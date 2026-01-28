@@ -7,10 +7,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using simple_ecommerce.Models;
+using ecommerce.Models;
 using System.Security.Claims;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ProductController : Controller

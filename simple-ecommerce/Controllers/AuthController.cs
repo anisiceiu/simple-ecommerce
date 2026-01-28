@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using simple_ecommerce.Models;
+using ecommerce.Models;
 using System.Security.Claims;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     public class AuthController : Controller
     {

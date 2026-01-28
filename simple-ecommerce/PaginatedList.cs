@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 
-namespace simple_ecommerce
+namespace ecommerce
 {
     public class PaginatedList<T> : List<T>
     {

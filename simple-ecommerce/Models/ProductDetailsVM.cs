@@ -1,7 +1,7 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Domain;
 
-namespace simple_ecommerce.Models
+namespace ecommerce.Models
 {
     public class ProductDetailsVM
     {

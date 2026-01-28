@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     [Authorize]
     public class ChatController : Controller

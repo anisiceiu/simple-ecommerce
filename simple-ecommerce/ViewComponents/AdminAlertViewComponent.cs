@@ -1,8 +1,8 @@
 ﻿using ECommerce.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
-using simple_ecommerce.Models;
+using ecommerce.Models;
 
-namespace simple_ecommerce.ViewComponents
+namespace ecommerce.ViewComponents
 {
     public class AdminAlertViewComponent : ViewComponent
     {

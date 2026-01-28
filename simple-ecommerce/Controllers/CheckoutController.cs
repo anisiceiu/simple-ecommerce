@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using simple_ecommerce.Models;
+using ecommerce.Models;
 using System.Globalization;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     [Authorize]
     public class CheckoutController : Controller

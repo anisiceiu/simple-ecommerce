@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace simple_ecommerce
+namespace ecommerce
 {
     public static class SessionExtensions
     {

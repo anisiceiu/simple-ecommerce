@@ -1,7 +1,7 @@
-﻿namespace simple_ecommerce.ViewComponents
+﻿namespace ecommerce.ViewComponents
 {
     using Microsoft.AspNetCore.Mvc;
-    using simple_ecommerce.Models;
+    using ecommerce.Models;
     using System.Text.Json;
 
     namespace MyShop.Web.ViewComponents

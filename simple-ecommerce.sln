@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36811.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "simple-ecommerce", "simple-ecommerce\simple-ecommerce.csproj", "{7BF7D93E-0F3A-4F10-B36D-C77BF8EB5E1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ecommerce", "simple-ecommerce\ecommerce.csproj", "{7BF7D93E-0F3A-4F10-B36D-C77BF8EB5E1E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommerce.Domain", "ECommerce.Domain\ECommerce.Domain.csproj", "{0374F965-1F11-4BD8-8CDC-80A12E727447}"
 EndProject

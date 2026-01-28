@@ -1,4 +1,4 @@
-﻿namespace simple_ecommerce.ViewComponents
+﻿namespace ecommerce.ViewComponents
 {
     using ECommerce.Application.Interfaces;
     using Microsoft.AspNetCore.Mvc;

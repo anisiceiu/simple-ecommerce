@@ -1,4 +1,4 @@
-﻿namespace simple_ecommerce.Hubs
+﻿namespace ecommerce.Hubs
 {
     using ECommerce.Domain;
     using ECommerce.Domain.Entities;

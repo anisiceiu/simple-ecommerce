@@ -5,7 +5,7 @@ using ECommerce.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     public class CategoryController : Controller
     {
@@ -20,7 +20,7 @@ namespace simple_ecommerce.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            return await Task.Run(()=> View());
         }
         public IActionResult Create()
         {

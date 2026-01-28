@@ -1,4 +1,4 @@
-﻿namespace simple_ecommerce.Models
+﻿namespace ecommerce.Models
 {
     public class AdminAlertVM
     {

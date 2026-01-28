@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using simple_ecommerce.Hubs;
-using simple_ecommerce.Models;
+using ecommerce.Hubs;
+using ecommerce.Models;
 using System.Diagnostics;
 using System.Security.Claims;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     public class HomeController : Controller
     {

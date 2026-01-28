@@ -5,8 +5,8 @@
 
 @using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
-@using simple_ecommerce.Resources
-@inject IHtmlLocalizer<SharedResource> Localizer
+@inject LanguageService L
+
 
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>eCommerce</title>
+    <title>eCommerce @Localizer["str_welcome_message"]</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon -->
@@ -102,15 +102,15 @@
                                         </div>
                                     </li>
                                     <!-- Setting Area End Here -->
-                                   @*  <li>
+                                    <li>
                                         <div class="ht-setting-trigger"><span>Language</span></div>
                                         <div class="setting ht-setting">
                                             <ul class="ht-setting-list">
-                                                <li><a href="/Language/SetLanguage?culture=en-US">EN</a></li>
-                                                <li><a href="/Language/SetLanguage?culture=bn-BD">BN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=en">EN</a></li>
+                                                <li><a href="/Language/SetLanguage?culture=bn">BN</a></li>
                                             </ul>
                                         </div>
-                                    </li> *@
+                                    </li>
                                     <!-- Begin Language Area -->
                                     <li>
                                         @if(User.Identity?.IsAuthenticated == false)

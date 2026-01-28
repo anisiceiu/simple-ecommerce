@@ -1,10 +1,10 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Domain;
 using Microsoft.AspNetCore.Mvc;
-using simple_ecommerce.Models;
+using ecommerce.Models;
 using System.Text.Json;
 
-namespace simple_ecommerce.Controllers
+namespace ecommerce.Controllers
 {
     public class CartController : Controller
     {

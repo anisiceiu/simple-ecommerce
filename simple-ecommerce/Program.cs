@@ -5,12 +5,14 @@ using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using simple_ecommerce.Hubs;
-using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using ecommerce.Hubs;
+using System.Globalization;
+using System.Reflection;
 
-namespace simple_ecommerce
+namespace ecommerce
 {
     public class Program
     {
@@ -36,14 +38,38 @@ namespace simple_ecommerce
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
 
+            #region Localization
+            //Step 1
+            builder.Services.AddSingleton<LanguageService>();
             builder.Services.AddLocalization(options =>
             {
                 options.ResourcesPath = "Resources";
             });
 
+
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                        new CultureInfo("en"),
+                        new CultureInfo("bn")
+                    };
+
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+
+                options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+            });
+
+            #endregion
+
+
             builder.Services.AddControllersWithViews()
-                .AddViewLocalization()
-                .AddDataAnnotationsLocalization();
+    .AddViewLocalization()
+    .AddDataAnnotationsLocalization();
+
+
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -108,28 +134,27 @@ namespace simple_ecommerce
             }
 
 
-            var supportedCultures = new[] { new CultureInfo("en"), new CultureInfo("bn") };
-
-            var localizationOptions = new RequestLocalizationOptions
-            {
-                DefaultRequestCulture = new RequestCulture("en"),
-                SupportedCultures = supportedCultures,
-                SupportedUICultures = supportedCultures,
-                RequestCultureProviders = new IRequestCultureProvider[]
-                {
-        new CookieRequestCultureProvider()
-                }
-            };
-
+            
 
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
 
-            app.UseRequestLocalization(localizationOptions);
+            //Step 2
+            app.UseRequestLocalization(
+                    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value
+                );
             app.UseRouting();
-            
+
+            var assembly = typeof(SharedResource).Assembly;
+            var names = assembly.GetManifestResourceNames();
+            Console.WriteLine("Embedded resources in SharedResource assembly:");
+            foreach (var name in names)
+            {
+                Console.WriteLine(name);
+            }
+
 
 
             app.UseAuthentication();
