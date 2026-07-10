@@ -1,4 +1,7 @@
 ﻿using ECommerce.Application.Interfaces;
+using ECommerce.Application.Services;
+using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +12,14 @@ namespace ecommerce.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IOrderService _orderService;
-        public AdminController(IAuthService authService, IOrderService orderService)
+        private readonly IInventoryTransactionService _inventoryService;
+        private readonly IProductService _productService;
+        public AdminController(IAuthService authService, IOrderService orderService, IInventoryTransactionService inventoryService, IProductService productService)
         {
               _authService = authService;
             _orderService = orderService;
+            _inventoryService = inventoryService;
+            _productService = productService;
         }
         public IActionResult Index()
         {
@@ -30,6 +37,38 @@ namespace ecommerce.Controllers
                 return NotFound();
 
             await _orderService.UpdateStatusAsync(orderId,status);
+           
+           if(order.Status != "Delivered" && status == "Delivered")
+            {
+
+                foreach (var item in order.OrderItems)
+                {
+                    // Process each order item
+                    var product = await _productService.GetByIdAsync(item.ProductId);
+                    int previousStock = product.Stock;
+
+                    product.Stock -= item.Quantity;
+
+                    bool updated = await _productService.UpdateAsync(product.Id, product);
+
+                    var transaction = new InventoryTransaction
+                    {
+                        ProductId = product.Id,
+                        TransactionType = InventoryTransactionType.StockOut,
+                        Quantity = item.Quantity,
+                        PreviousStock = previousStock,
+                        NewStock = product.Stock,
+                        ReferenceNo = null,
+                        Notes = "Sold Out",
+                        CreatedAt = DateTime.UtcNow
+                    };
+
+                    await _inventoryService.AddAsync(transaction);
+                    await _inventoryService.SaveChangesAsync();
+
+                }
+            }
+            
 
             return RedirectToAction("OrderDetails", new { id = orderId });
         }
