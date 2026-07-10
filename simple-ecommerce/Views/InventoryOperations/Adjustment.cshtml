@@ -1,0 +1,77 @@
+﻿@model ecommerce.Models.StockAdjustmentViewModel
+
+@{
+    ViewData["Title"] = "Stock Adjustment";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header bg-warning">
+            <h4 class="mb-0">
+                Stock Adjustment
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-action="Adjustment" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <input asp-for="ProductId" type="hidden" />
+
+                <div class="mb-3">
+                    <label class="form-label">
+                        Product
+                    </label>
+
+                    <input asp-for="ProductName"
+                           class="form-control"
+                           readonly />
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="NewStock"></label>
+
+                    <input asp-for="NewStock"
+                           class="form-control" />
+
+                    <span asp-validation-for="NewStock"
+                          class="text-danger"></span>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label asp-for="Notes"></label>
+
+                    <textarea asp-for="Notes"
+                              rows="4"
+                              class="form-control">
+                    </textarea>
+
+                </div>
+
+                <button class="btn btn-warning">
+                    Save
+                </button>
+
+                <a asp-controller="Inventory"
+                   asp-action="Index"
+                   class="btn btn-secondary">
+                    Cancel
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+

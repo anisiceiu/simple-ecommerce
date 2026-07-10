@@ -17,7 +17,7 @@ public class ProductRepository : IProductRepository
 
 
     public async Task<List<Product>> GetAllAsync()
-    => await _context.Products.ToListAsync();//.Include(p=> p.Ratings)
+    => await _context.Products.Include(p=> p.Category).ToListAsync();//.Include(p=> p.Ratings)
 
 
     public async Task AddAsync(Product product)

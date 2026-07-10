@@ -19,6 +19,7 @@ public class Product
     public decimal Price { get; set; }
 
     public int Stock { get; set; }
+    public int ReorderLevel { get; set; } = 0;
 
     [MaxLength(255)]
     public string ImageUrl { get; set; }

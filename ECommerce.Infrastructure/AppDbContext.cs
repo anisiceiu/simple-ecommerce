@@ -23,6 +23,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Address> Addresses { get; set; }
     public DbSet<OrderAddress> OrderAddress { get; set; }
     public DbSet<ProductRating> ProductRatings { get; set; }
+    public DbSet<InventoryTransaction> InventoryTransactions { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
