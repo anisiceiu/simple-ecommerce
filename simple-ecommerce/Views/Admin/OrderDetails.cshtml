@@ -5,13 +5,18 @@
     Layout = "_LayoutAdmin";
 }
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <div class="container mt-4">
     <h2>Order Details</h2>
-    <div class="card mb-4">
+    <div class="d-flex justify-content-end">
+        <button id="btnPdf" class="btn btn-outline-primary"><i class="fa fa-print"></i> Download PDF</button>
+    </div>
+    
+    <div id="invoice" class="card mb-4">
         <div class="card-header bg-primary text-white">
-            Order #@Model.Id
+            <span>Order #@Model.Id</span>
         </div>
-        <div class="card-body">
+        <div  class="card-body">
             <div class="row mb-3">
                 <div class="col-md-6">
                     <h5>Customer Info</h5>
@@ -108,3 +113,30 @@
         <a href="@Url.Action("Orders", "Admin")" class="btn btn-secondary">Back to Orders</a>
     </div>
 </div>
+
+
+ <script>
+    document.getElementById("btnPdf").addEventListener("click", function () {
+
+    const element = document.getElementById("invoice");
+
+    const options = {
+    margin: 10,
+    filename: 'Invoice.pdf',
+    image: {
+    type: 'jpeg',
+    quality: 1
+    },
+    html2canvas: {
+    scale: 2
+    },
+    jsPDF: {
+    unit: 'mm',
+    format: 'a4',
+    orientation: 'portrait'
+    }
+    };
+
+    html2pdf().set(options).from(element).save();
+    });
+ </script>
