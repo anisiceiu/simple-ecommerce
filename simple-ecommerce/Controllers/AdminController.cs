@@ -4,6 +4,7 @@ using ECommerce.Domain;
 using ECommerce.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ClosedXML.Excel;
 
 namespace ecommerce.Controllers
 {
@@ -96,9 +97,30 @@ namespace ecommerce.Controllers
             return Ok(customers);
         }
 
-        public async Task<IActionResult> GetAllOrders()
+        public async Task<IActionResult> GetAllOrders(string? startDate = null, string? endDate = null)
         {
-            var orders = await _orderService.GetAllOrderForListAsync();
+            DateTime? startDateTime = null;
+            DateTime? endDateTime = null;
+
+            if (!string.IsNullOrEmpty(startDate) && DateTime.TryParse(startDate, out var start))
+            {
+                startDateTime = start;
+            }
+
+            if (!string.IsNullOrEmpty(endDate) && DateTime.TryParse(endDate, out var end))
+            {
+                endDateTime = end;
+            }
+
+            IEnumerable<Order> orders;
+            if (startDateTime.HasValue || endDateTime.HasValue)
+            {
+                orders = await _orderService.GetOrdersByDateRangeAsync(startDateTime, endDateTime);
+            }
+            else
+            {
+                orders = await _orderService.GetAllOrderForListAsync();
+            }
 
             return Ok(orders);
         }
@@ -106,6 +128,108 @@ namespace ecommerce.Controllers
         public IActionResult AlertPartial()
         {
             return ViewComponent("AdminAlert");
+        }
+
+        public async Task<IActionResult> ExportOrdersToExcel(string? startDate = null, string? endDate = null)
+        {
+            try
+            {
+                DateTime? startDateTime = null;
+                DateTime? endDateTime = null;
+
+                if (!string.IsNullOrEmpty(startDate) && DateTime.TryParse(startDate, out var start))
+                {
+                    startDateTime = start;
+                }
+
+                if (!string.IsNullOrEmpty(endDate) && DateTime.TryParse(endDate, out var end))
+                {
+                    endDateTime = end;
+                }
+
+                IEnumerable<Order> orders;
+                if (startDateTime.HasValue || endDateTime.HasValue)
+                {
+                    orders = await _orderService.GetOrdersByDateRangeAsync(startDateTime, endDateTime);
+                }
+                else
+                {
+                    orders = await _orderService.GetAllOrderForListAsync();
+                }
+
+                // Create Excel workbook
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("Orders");
+
+                    // Add headers
+                    worksheet.Cell(1, 1).Value = "Order ID";
+                    worksheet.Cell(1, 2).Value = "Customer Phone";
+                    worksheet.Cell(1, 3).Value = "Total Amount";
+                    worksheet.Cell(1, 4).Value = "Status";
+                    worksheet.Cell(1, 5).Value = "Created Date";
+
+                    // Format header row
+                    var headerRow = worksheet.Range(1, 1, 1, 5);
+                    headerRow.Style.Font.Bold = true;
+                    headerRow.Style.Fill.BackgroundColor = XLColor.LightGray;
+                    headerRow.Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+
+                    // Add data rows
+                    int row = 2;
+                    foreach (var order in orders)
+                    {
+                        worksheet.Cell(row, 1).Value = order.Id;
+                        worksheet.Cell(row, 2).Value = order.User?.PhoneNumber ?? "N/A";
+                        worksheet.Cell(row, 3).Value = order.TotalAmount;
+                        worksheet.Cell(row, 4).Value = order.Status;
+                        worksheet.Cell(row, 5).Value = order.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss");
+                        row++;
+                    }
+
+                    // Adjust column widths
+                    worksheet.Column(1).Width = 12;
+                    worksheet.Column(2).Width = 18;
+                    worksheet.Column(3).Width = 15;
+                    worksheet.Column(4).Width = 15;
+                    worksheet.Column(5).Width = 20;
+
+                    // Format currency column
+                    worksheet.Column(3).Style.NumberFormat.Format = "$#,##0.00";
+
+                    // Save to memory stream
+                    using (var stream = new MemoryStream())
+                    {
+                        workbook.SaveAs(stream);
+                        var content = stream.ToArray();
+
+                        // Generate filename with date range
+                        string fileName;
+                        if (startDateTime.HasValue && endDateTime.HasValue)
+                        {
+                            fileName = $"Orders_{startDateTime:yyyy-MM-dd}_to_{endDateTime:yyyy-MM-dd}.xlsx";
+                        }
+                        else if (startDateTime.HasValue)
+                        {
+                            fileName = $"Orders_from_{startDateTime:yyyy-MM-dd}.xlsx";
+                        }
+                        else if (endDateTime.HasValue)
+                        {
+                            fileName = $"Orders_until_{endDateTime:yyyy-MM-dd}.xlsx";
+                        }
+                        else
+                        {
+                            fileName = $"Orders_{DateTime.Now:yyyy-MM-dd_HHmmss}.xlsx";
+                        }
+
+                        return File(content, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Error exporting orders", error = ex.Message });
+            }
         }
 
     }

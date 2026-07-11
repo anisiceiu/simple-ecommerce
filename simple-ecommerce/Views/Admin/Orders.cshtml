@@ -6,16 +6,48 @@
 
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Orders Report</h6>
     </div>
     <div class="card-body">
+        <!-- Date Filter Section -->
+        <div class="row mb-4">
+            <div class="col-md-2">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" id="startDate" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" id="endDate" class="form-control" />
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button id="filterBtn" class="btn btn-primary form-control">Filter</button>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button id="resetBtn" class="btn btn-secondary form-control">Reset</button>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button id="exportBtn" class="btn btn-success form-control">
+                    <i class="fas fa-download"></i> Export to Excel
+                </button>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label">&nbsp;</label>
+                <button id="exportAllBtn" class="btn btn-info form-control">
+                    <i class="fas fa-file-excel"></i> Export All
+                </button>
+            </div>
+        </div>
+
         <div class="table-responsive">
             <table id="ordersTable" class="table table-bordered" style="width:100%">
                 <thead>
                     <tr>
                         <th>ID</th>
                         <th>User ID</th>
-                       @*  <th>User Name</th> *@
+                        @*  <th>User Name</th> *@
                         <th>Total Amount</th>
                         <th>Status</th>
                         <th>Created At</th>
@@ -28,14 +60,50 @@
 
 
 <script>
+    let dataTable;
+
+        function getToday() {
+        const d = new Date();
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
     $(document).ready(function() {
-        $('#ordersTable').DataTable({
+
+        const today = getToday();
+
+    $('#startDate').val(today);
+    $('#endDate').val(today);
+
+        initializeDataTable();
+
+        // Filter button click handler
+        $('#filterBtn').click(function() {
+            dataTable.ajax.reload();
+        });
+
+        // Reset button click handler
+        $('#resetBtn').click(function() {
+            $('#startDate').val('');
+            $('#endDate').val('');
+            dataTable.ajax.reload();
+        });
+    });
+
+    function initializeDataTable() {
+        dataTable = $('#ordersTable').DataTable({
             ajax: {
                 url: '/Admin/GetAllOrders',
+                data: function(d) {
+                    d.startDate = $('#startDate').val();
+                    d.endDate = $('#endDate').val();
+                },
                 dataSrc: ''
             },
             columns: [
-                { 
+                {
                     data: 'id',
                     render: function(data, type, row) {
                     // Create a link to the Order Details page
@@ -64,7 +132,29 @@
             ],
             pageLength: 10,
             responsive: true,
-            order: [[0, 'desc']]
+            order: [[0, 'desc']],
+            destroy: true
         });
+    }
+
+    // Export button click handler
+    $('#exportBtn').click(function() {
+        const startDate = $('#startDate').val();
+        const endDate = $('#endDate').val();
+        let url = '/Admin/ExportOrdersToExcel';
+
+        if (startDate || endDate) {
+            const params = new URLSearchParams();
+            if (startDate) params.append('startDate', startDate);
+            if (endDate) params.append('endDate', endDate);
+            url += '?' + params.toString();
+        }
+
+        window.location.href = url;
+    });
+
+    // Export All button click handler
+    $('#exportAllBtn').click(function() {
+        window.location.href = '/Admin/ExportOrdersToExcel';
     });
 </script>

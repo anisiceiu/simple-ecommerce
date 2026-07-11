@@ -60,5 +60,24 @@ namespace ECommerce.Application.Services
         {
            await _repo.MakeUnseenOrdersSeen();
         }
+
+        public async Task<IEnumerable<Order>> GetOrdersByDateRangeAsync(DateTime? startDate, DateTime? endDate)
+        {
+            var allOrders = await GetAllOrderForListAsync();
+
+            if (startDate.HasValue)
+            {
+                allOrders = allOrders.Where(o => o.CreatedAt >= startDate.Value).ToList();
+            }
+
+            if (endDate.HasValue)
+            {
+                // Add one day to endDate to include the entire end date
+                var endDateNextDay = endDate.Value.AddDays(1);
+                allOrders = allOrders.Where(o => o.CreatedAt < endDateNextDay).ToList();
+            }
+
+            return allOrders.OrderByDescending(o => o.CreatedAt).ToList();
+        }
     }
 }

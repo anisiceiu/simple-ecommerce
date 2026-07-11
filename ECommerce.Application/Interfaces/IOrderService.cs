@@ -18,6 +18,7 @@ namespace ECommerce.Application.Interfaces
         Task<IEnumerable<Order>> GetAllOrderForListAsync();
         IQueryable<Order> GetOrdersIQueryable(string userId);
         Task MakeUnseenOrdersSeen();
+        Task<IEnumerable<Order>> GetOrdersByDateRangeAsync(DateTime? startDate, DateTime? endDate);
 
     }
 }
