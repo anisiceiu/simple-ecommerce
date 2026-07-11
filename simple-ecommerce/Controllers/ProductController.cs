@@ -98,6 +98,131 @@ namespace ecommerce.Controllers
             return Ok(products);
         }
 
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _productService.GetByIdAsync(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            var vm = new ProductCreateVM
+            {
+                Product = new ProductDto
+                {
+                    Id = product.Id,
+                    CategoryId = product.CategoryId,
+                    Name = product.Name,
+                    Description = product.Description,
+                    Price = product.Price,
+                    Stock = product.Stock,
+                    ImageUrl = product.ImageUrl,
+                    IsActive = product.IsActive,
+                    ReorderLevel = product.ReorderLevel,
+                    CreatedAt = product.CreatedAt
+                },
+                Categories = (await _CategoryService.GetAllAsync()).Where(c => c.IsActive)
+                            .Select(c => new SelectListItem
+                            {
+                                Value = c.Id.ToString(),
+                                Text = c.Name,
+                                Selected = c.Id == product.CategoryId
+                            }).ToList()
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProductCreateVM vm)
+        {
+            if (ModelState.IsValid)
+            {
+                var product = await _productService.GetByIdAsync(vm.Product.Id);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                // Handle image update
+                if (vm.Product.Image != null && vm.Product.Image.Length > 0)
+                {
+                    // Delete old image if exists
+                    if (!string.IsNullOrEmpty(product.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(_env.WebRootPath, "images/Products", product.ImageUrl);
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    // Save new image
+                    var imageUrl = await SaveImage(vm.Product.Image);
+                    product.ImageUrl = imageUrl;
+                }
+
+                // Update product properties
+                product.CategoryId = vm.Product.CategoryId;
+                product.Name = vm.Product.Name;
+                product.Description = vm.Product.Description;
+                product.Price = vm.Product.Price;
+                product.Stock = vm.Product.Stock;
+                product.IsActive = vm.Product.IsActive;
+                product.ReorderLevel = vm.Product.ReorderLevel;
+
+                await _productService.UpdateAsync(product.Id, product);
+
+                TempData["success"] = "Product updated successfully!";
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Reload dropdown if validation fails
+            vm.Categories = (await _CategoryService.GetAllAsync()).Where(c => c.IsActive)
+                                  .Select(c => new SelectListItem
+                                  {
+                                      Value = c.Id.ToString(),
+                                      Text = c.Name,
+                                      Selected = c.Id == vm.Product.CategoryId
+                                  }).ToList();
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var product = await _productService.GetByIdAsync(id);
+
+                if (product == null)
+                {
+                    return Json(new { success = false, message = "Product not found" });
+                }
+
+                // Delete associated image
+                if (!string.IsNullOrEmpty(product.ImageUrl))
+                {
+                    var imagePath = Path.Combine(_env.WebRootPath, "images/Products", product.ImageUrl);
+                    if (System.IO.File.Exists(imagePath))
+                    {
+                        System.IO.File.Delete(imagePath);
+                    }
+                }
+
+                await _productService.DeleteAsync(id);
+
+                return Json(new { success = true, message = "Product deleted successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error deleting product: {ex.Message}" });
+            }
+        }
 
     }
 }
