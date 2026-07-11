@@ -46,7 +46,7 @@
                 <thead>
                     <tr>
                         <th>ID</th>
-                        <th>User ID</th>
+                        <th>Phone Number</th>
                         @*  <th>User Name</th> *@
                         <th>Total Amount</th>
                         <th>Status</th>
@@ -107,7 +107,7 @@
                     data: 'id',
                     render: function(data, type, row) {
                     // Create a link to the Order Details page
-                    return `<a href="/Admin/OrderDetails?id=${data}" class="btn-link">${data}</a>`;
+                    return `<a href="/Admin/OrderDetails?id=${data}" class="btn-link">Order #${data}</a>`;
                     }
                 },
                 {
