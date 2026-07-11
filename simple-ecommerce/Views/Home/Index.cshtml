@@ -121,7 +121,7 @@
                                                     <a href="/Home/ProductDetails?id=@item.Id">
                                                         <img onerror="this.onerror=null;this.src='/images/products/no-image.png';" src="images/product/large-size/12.jpg" alt="Li's Product Image">
                                                     </a>
-                                                    <span class="sticker">New</span>
+                                                   @*  <span class="sticker">New</span> *@
                                                 </div>
                                             </div>
                                             <div class="col-lg-5 col-md-7">
@@ -146,8 +146,8 @@
                                                             <span class="new-price">$@item.Price</span>
                                                         </div>
                                                         <p>@item.Description</p>
-                                                        <div >
-                                                            <a class="btn btn-primary add-to-cart" data-id="@item.Id" data-name="@item.Name" data-price="@item.Price">Add to cart</a>
+                                                        <div>
+                                                            <a class="btn add-to-cart" style="background:#fed700!important" data-id="@item.Id" data-name="@item.Name" data-price="@item.Price">Add to cart</a>
                                                         </div>
                                                     </div>
                                                 </div>
