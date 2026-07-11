@@ -71,6 +71,23 @@
 /*----------------------------------------*/
 /*  1.1 Basic
 /*----------------------------------------*/
+
+.star-rating {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+	.star-rating li {
+		display: inline-block;
+		font-size: 30px;
+		color: #ccc;
+		cursor: pointer;
+	}
+
+		.star-rating li.active {
+			color: #ffc107;
+		}
 body {
 	color: #242424;
 	font-family: 'Rubik', sans-serif;

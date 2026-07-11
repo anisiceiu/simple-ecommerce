@@ -30,7 +30,7 @@
                             <ul class="star-rating user-rating">
                                 @for (int i = 1; i <= 5; i++)
                                 {
-                                    <li data-value="@i">&#9733;</li>
+                                    <li data-value="@i" class="@(i <= Model.UserRating ? "active" : "")">&#9733;</li>
                                 }
                             </ul>
 
