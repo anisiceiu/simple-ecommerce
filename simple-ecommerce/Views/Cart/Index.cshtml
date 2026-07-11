@@ -4,88 +4,205 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                @if (!Model.Any())
-                {
-                    <p>Your cart is empty.</p>
-                }
-                else
-                {
-                    <div id="cart-container">
-                    <form action="#">
-                        <div class="table-content table-responsive">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th class="li-product-remove">remove</th>
-                                        <th class="li-product-thumbnail">images</th>
-                                        <th class="cart-product-name">Product</th>
-                                        <th class="li-product-price">Unit Price</th>
-                                        <th class="li-product-quantity">Quantity</th>
-                                        <th class="li-product-subtotal">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
+                <div id="cart-container">
+                    @if (!Model.Any())
+                    {
+                        <p>Your cart is empty.</p>
+                    }
+                    else
+                    {
+                        <form action="#">
+                            <div class="table-content table-responsive">
+                                <table class="table">
+                                    <thead>
                                         <tr>
-                                            <td class="li-product-remove"><a asp-action="Remove" asp-route-id="@item.ProductId"><i class="fa fa-times"></i></a></td>
-                                            <td class="li-product-thumbnail"><a href="#"><img src="images/product/small-size/5.jpg" alt="Li's Product Image"></a></td>
-                                            <td class="li-product-name"><a href="#">@item.ProductName</a></td>
-                                            <td class="li-product-price"><span class="amount">$@item.Price</span></td>
-                                            <td class="quantity">
-                                                <label>Quantity</label>
-                                                <div class="cart-plus-minus">
-                                                    <input class="cart-plus-minus-box" data-id="@item.ProductId" value="@item.Quantity" min="1" type="number">
-                                                    <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
-                                                    <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
-                                                </div>
-                                            </td>
-                                            <td class="product-subtotal"><span class="amount">$@item.Total</span></td>
+                                            <th class="li-product-remove">remove</th>
+                                            <th class="li-product-thumbnail">images</th>
+                                            <th class="cart-product-name">Product</th>
+                                            <th class="li-product-price">Unit Price</th>
+                                            <th class="li-product-quantity">Quantity</th>
+                                            <th class="li-product-subtotal">Total</th>
                                         </tr>
-                                    }
-                                </tbody>
-                        </table>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="coupon-all">
-                                
-                                <div class="coupon2">
-                                        <a class="button btn btn-dark" name="Clear_cart" asp-action="Clear">Clear cart</a>
-                                </div>
+                                    </thead>
+                                    <tbody id="cart-items">
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr data-product-id="@item.ProductId">
+                                                <td class="li-product-remove"><a href="javascript:removeFromCart(@item.ProductId)"><i class="fa fa-times"></i></a></td>
+                                                <td class="li-product-thumbnail"><a href="#"><img src="images/product/small-size/5.jpg" alt="Li's Product Image"></a></td>
+                                                <td class="li-product-name"><a href="#">@item.ProductName</a></td>
+                                                <td class="li-product-price"><span class="amount">$@item.Price</span></td>
+                                                <td class="quantity">
+                                                    <label>Quantity</label>
+                                                    <div class="cart-plus-minus">
+                                                        <input class="cart-plus-minus-box" data-id="@item.ProductId" value="@item.Quantity" min="1" type="number" onchange="updateCartQuantity(@item.ProductId, this.value)">
+                                                        <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
+                                                        <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
+                                                    </div>
+                                                </td>
+                                                <td class="product-subtotal"><span class="amount item-total">$@item.Total</span></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-5 ml-auto">
-                            <div class="cart-page-total">
-                                <h2>Cart totals</h2>
-                                <ul>
-                                        <li>Subtotal <span>$@Model.Sum(x => x.Total)</span></li>
-                                        <li>Total <span>$@Model.Sum(x => x.Total)</span></li>
-                                </ul>
-                                    <a asp-controller="Checkout" asp-action="Index">Proceed to checkout</a>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                        </form>
+                    }
                 </div>
-                }
+                <div class="row mt-3">
+                    <div class="col-12">
+                        <div class="coupon-all">
+                            <div class="coupon2">
+                                <a class="button btn btn-dark" href="javascript:clearCart()">Clear cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-5 ml-auto">
+                        <div class="cart-page-total">
+                            <h2>Cart totals</h2>
+                            <ul>
+                                <li>Subtotal <span id="cart-subtotal">$@Model.Sum(x => x.Total)</span></li>
+                                <li>Total <span id="cart-total">$@Model.Sum(x => x.Total)</span></li>
+                            </ul>
+                            <a asp-controller="Checkout" asp-action="Index">Proceed to checkout</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.0/signalr.min.js"></script>
 <script>
-    function onQuatityChange(productId,ele)
-    {
-        let el= $(ele).val();
-        alert();
-        $.ajax({
-        url: '/Cart/Update',
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ id: productId, quantity: quantity })
-    });
+    let connection;
+
+    // Initialize SignalR connection
+    async function initCartSignalR() {
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl("/cartHub")
+            .withAutomaticReconnect()
+            .build();
+
+        // Listen for cart updates
+        connection.on("ItemAdded", function (item) {
+            console.log("Item added:", item);
+            refreshCartUI();
+        });
+
+        connection.on("ItemRemoved", function (productId) {
+            console.log("Item removed:", productId);
+            refreshCartUI();
+        });
+
+        connection.on("ItemUpdated", function (data) {
+            console.log("Item updated:", data);
+            refreshCartUI();
+        });
+
+        connection.on("CartCleared", function () {
+            console.log("Cart cleared");
+            refreshCartUI();
+        });
+
+        connection.on("CartUpdated", function (cart) {
+            console.log("Cart updated:", cart);
+            refreshCartUI();
+        });
+
+        try {
+            await connection.start();
+            console.log("SignalR connected to CartHub");
+        } catch (err) {
+            console.error("SignalR connection error:", err);
+            setTimeout(initCartSignalR, 5000); // Retry after 5 seconds
+        }
     }
+
+    // Remove item from cart
+    function removeFromCart(productId) {
+        if (confirm("Remove this item from cart?")) {
+            window.location.href = `/Cart/Remove?id=${productId}`;
+        }
+    }
+
+    // Update cart quantity
+    function updateCartQuantity(productId, quantity) {
+        if (quantity <= 0) {
+            alert("Quantity must be at least 1");
+            return;
+        }
+
+        fetch('/Cart/Update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: productId, quantity: parseInt(quantity) })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Cart updated successfully");
+            }
+        })
+        .catch(error => console.error("Error updating cart:", error));
+    }
+
+    // Clear entire cart
+    function clearCart() {
+        if (confirm("Clear your entire cart?")) {
+            window.location.href = "/Cart/Clear";
+        }
+    }
+
+    // Refresh cart UI by reloading the cart container
+    async function refreshCartUI() {
+        try {
+            const response = await fetch('/Cart/GetCartSummary');
+            const html = await response.text();
+            document.getElementById('cart-container').innerHTML = html;
+            updateCartTotals();
+        } catch (error) {
+            console.error("Error refreshing cart UI:", error);
+            // Fallback: reload the page
+            location.reload();
+        }
+    }
+
+    // Calculate and update cart totals
+    function updateCartTotals() {
+        const rows = document.querySelectorAll('#cart-items tr');
+        let subtotal = 0;
+
+        rows.forEach(row => {
+            const priceEl = row.querySelector('.li-product-price .amount');
+            const quantityEl = row.querySelector('.cart-plus-minus-box');
+            const totalEl = row.querySelector('.item-total');
+
+            if (priceEl && quantityEl && totalEl) {
+                const price = parseFloat(priceEl.textContent.replace('$', ''));
+                const quantity = parseInt(quantityEl.value);
+                const total = price * quantity;
+                totalEl.textContent = `$${total.toFixed(2)}`;
+                subtotal += total;
+            }
+        });
+
+        document.getElementById('cart-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+        document.getElementById('cart-total').textContent = `$${subtotal.toFixed(2)}`;
+    }
+
+    // Initialize SignalR when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        initCartSignalR();
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', function () {
+        if (connection) {
+            connection.stop();
+        }
+    });
 </script>

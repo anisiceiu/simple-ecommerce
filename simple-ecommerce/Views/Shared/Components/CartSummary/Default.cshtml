@@ -10,3 +10,104 @@
 
     </div>
 
+
+<script>
+    let cartConnection;
+
+    async function initCartSummarySignalR() {
+        cartConnection = new signalR.HubConnectionBuilder()
+            .withUrl("/cartHub")
+            .withAutomaticReconnect()
+            .build();
+
+        // Update cart summary when item is added
+        cartConnection.on("ItemAdded", function (item) {
+            console.log("Cart Summary - Item added:", item);
+            updateCartSummary();
+        });
+
+        // Update cart summary when item is removed
+        cartConnection.on("ItemRemoved", function (productId) {
+            console.log("Cart Summary - Item removed:", productId);
+            updateCartSummary();
+        });
+
+        // Update cart summary when item quantity is updated
+        cartConnection.on("ItemUpdated", function (data) {
+            console.log("Cart Summary - Item updated:", data);
+            updateCartSummary();
+        });
+
+        // Update cart summary when cart is cleared
+        cartConnection.on("CartCleared", function () {
+            console.log("Cart Summary - Cart cleared");
+            updateCartSummary();
+        });
+
+        // Update cart summary when full cart is updated
+        cartConnection.on("CartUpdated", function (cart) {
+            console.log("Cart Summary - Cart updated:", cart);
+            updateCartSummary();
+        });
+
+        try {
+            await cartConnection.start();
+            console.log("SignalR connected to CartHub from CartSummary");
+        } catch (err) {
+            console.error("CartSummary SignalR connection error:", err);
+            setTimeout(initCartSummarySignalR, 5000);
+        }
+    }
+
+    function updateCartSummary() {
+        fetch('/Cart/GetCartSummary')
+            .then(response => response.text())
+            .then(html => {
+                // Replace only the cart summary content
+                const miniCartDiv = document.querySelector('.hm-minicart-trigger');
+                if (miniCartDiv) {
+                    // Extract the new cart summary from the response
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, 'text/html');
+                    const newContent = doc.querySelector('.hm-minicart-trigger');
+                    if (newContent) {
+                        miniCartDiv.replaceWith(newContent);
+                    }
+                }
+            })
+            .catch(error => console.error("Error updating cart summary:", error));
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function () {
+        if (!cartConnection) {
+            initCartSummarySignalR();
+        }
+    });
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', function () {
+        if (cartConnection) {
+            cartConnection.stop();
+        }
+    });
+
+
+    $(function () {
+
+    $(window).on("focus", function () {
+        console.log("Window focused");
+        updateCartSummary();
+    });
+
+    document.addEventListener("visibilitychange", function () {
+        if (!document.hidden) {
+            console.log("Tab active");
+            updateCartSummary();
+        }
+    });
+
+    
+
+});
+</script>

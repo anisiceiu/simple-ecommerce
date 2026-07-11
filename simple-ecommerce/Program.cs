@@ -162,6 +162,7 @@ namespace ecommerce
 
             app.MapHub<ChatHub>("/chatHub");
             app.MapHub<AdminNotificationHub>("/adminHub");
+            app.MapHub<CartHub>("/cartHub");
 
             app.MapControllerRoute(
                 name: "default",
