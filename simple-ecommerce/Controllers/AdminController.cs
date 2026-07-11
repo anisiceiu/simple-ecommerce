@@ -232,5 +232,43 @@ namespace ecommerce.Controllers
             }
         }
 
+        public async Task<IActionResult> Ratings()
+        {
+            var ratings = await _productService.GetAllRatingsAsync();
+
+            var statistics = new
+            {
+                TotalRatings = ratings.Count(),
+                AverageRating = ratings.Any() ? Math.Round(ratings.Average(r => r.Rating), 2) : 0,
+                FiveStarRatings = ratings.Count(r => r.Rating == 5),
+                FourStarRatings = ratings.Count(r => r.Rating == 4),
+                ThreeStarRatings = ratings.Count(r => r.Rating == 3),
+                TwoStarRatings = ratings.Count(r => r.Rating == 2),
+                OneStarRatings = ratings.Count(r => r.Rating == 1),
+                RatingsWithComments = ratings.Count(r => !string.IsNullOrEmpty(r.Comment))
+            };
+
+            ViewBag.Statistics = statistics;
+            return View();
+        }
+
+        public async Task<IActionResult> GetAllRatings()
+        {
+            var ratings = await _productService.GetAllRatingsAsync();
+            var ratingsData = ratings.Select(r => new
+            {
+                r.Id,
+                r.ProductId,
+                ProductName = r.Product?.Name ?? "Unknown Product",
+                r.UserId,
+                r.Rating,
+                r.Comment,
+                CreatedAt = r.CreatedAt.ToString("MMM dd, yyyy HH:mm")
+            }).ToList();
+
+            return Ok(ratingsData);
+        }
+
     }
 }
+

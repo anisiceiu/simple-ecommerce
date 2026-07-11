@@ -36,9 +36,29 @@
 
                             <div class="avg-rating">
                                 Average Rating:
-                                <span>@Model.AverageRating.ToString("0.0")</span>
+                                <span>@Model.AverageRating.ToString("0.0")</span> / 5 
+                                <span class="rating-count">(@Model.TotalRatings reviews)</span>
                             </div>
                         </div>
+
+                        <!-- Rating Distribution -->
+                        @if (Model.TotalRatings > 0)
+                        {
+                            <div class="rating-distribution mt-3 mb-3">
+                                @for (int stars = 5; stars >= 1; stars--)
+                                {
+                                    int count = Model.RatingDistribution.ContainsKey(stars) ? Model.RatingDistribution[stars] : 0;
+                                    double percentage = Model.TotalRatings > 0 ? (count * 100.0 / Model.TotalRatings) : 0;
+                                    <div class="rating-bar-item mb-2">
+                                        <span class="stars-label">@stars ★</span>
+                                        <div class="rating-bar-container">
+                                            <div class="rating-bar-fill" style="width: @percentage%"></div>
+                                        </div>
+                                        <span class="rating-count">(@count)</span>
+                                    </div>
+                                }
+                            </div>
+                        }
 
                         <div class="price-box pt-20">
                             <span class="new-price new-price-2">$@Model.Product.Price</span>
@@ -46,7 +66,7 @@
                         <div class="product-desc">
                             <p>
                                 <span>
-                                    100% cotton double printed dress. Black and white striped top and orange high waisted skater skirt bottom. Lorem ipsum dolor sit amet, consectetur adipisicing elit. quibusdam corporis, earum facilis et nostrum dolorum accusamus similique eveniet quia pariatur.
+                                    @Model.Product.Description
                                 </span>
                             </p>
                         </div>
@@ -57,8 +77,50 @@
                             </div>
                         </div>
 
-
                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="row mt-5">
+            <div class="col-lg-12">
+                <div class="reviews-section">
+                    <h3 class="reviews-title mb-4">Customer Reviews (@Model.TotalRatings)</h3>
+
+                    @if (Model.Reviews.Any())
+                    {
+                        <div class="reviews-list">
+                            @foreach (var review in Model.Reviews)
+                            {
+                                <div class="review-item mb-4 p-3 border rounded">
+                                    <div class="review-header d-flex justify-content-between align-items-start">
+                                        <div class="review-user-info">
+                                            <h5 class="review-user-name">@review.UserDisplayName</h5>
+                                            <div class="review-rating mb-2">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    <span class="star" style="color: @(i <= review.Rating ? "#ffc107" : "#ccc")">★</span>
+                                                }
+                                                <span class="ml-2 text-muted">@review.Rating.0 / 5</span>
+                                            </div>
+                                            <small class="text-muted">@review.CreatedAt.ToString("MMM dd, yyyy HH:mm")</small>
+                                        </div>
+                                    </div>
+                                    @if (!string.IsNullOrEmpty(review.Comment))
+                                    {
+                                        <div class="review-comment mt-2">
+                                            <p>@review.Comment</p>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+                    }
                 </div>
             </div>
         </div>
@@ -66,6 +128,104 @@
 </div>
 <!-- content-wraper end -->
 
+<style>
+    .rating-distribution {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 5px;
+    }
+
+    .rating-bar-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .stars-label {
+        min-width: 40px;
+        font-weight: bold;
+    }
+
+    .rating-bar-container {
+        flex: 1;
+        height: 8px;
+        background: #e9ecef;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+
+    .rating-bar-fill {
+        height: 100%;
+        background: #ffc107;
+        transition: width 0.3s ease;
+    }
+
+    .rating-count {
+        min-width: 50px;
+        text-align: right;
+        font-size: 0.9em;
+        color: #666;
+    }
+
+    .reviews-section {
+        background: #f8f9fa;
+        padding: 30px;
+        border-radius: 8px;
+    }
+
+    .reviews-title {
+        color: #333;
+        font-weight: bold;
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 10px;
+    }
+
+    .review-item {
+        background: white;
+        border: 1px solid #dee2e6;
+    }
+
+    .review-user-name {
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .review-rating {
+        color: #ffc107;
+        font-size: 1.1em;
+    }
+
+    .star {
+        margin-right: 2px;
+    }
+
+    .review-comment {
+        color: #555;
+        line-height: 1.6;
+    }
+
+    .user-rating li {
+        cursor: pointer;
+        font-size: 1.8em;
+        margin-right: 5px;
+        color: #ccc;
+        transition: color 0.2s;
+    }
+
+    .user-rating li.selected {
+        color: #ffc107;
+    }
+
+    .user-rating li.hover {
+        color: #ffc107;
+    }
+
+    .user-rating li.avg {
+        color: #ccc;
+        position: relative;
+    }
+</style>
 
 <script>
 

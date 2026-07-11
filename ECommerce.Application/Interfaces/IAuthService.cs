@@ -13,5 +13,6 @@ namespace ECommerce.Application.Interfaces
         Task<IList<string>> GetRolesAsync(ApplicationUser user);
         Task<ApplicationUser?> AddUserAsync(ApplicationUser user, string password);
         Task<List<ApplicationUser>> GetAllCustomersAsync();
+        Task<List<ApplicationUser>> GetAllUsersAsync();
     }
 }

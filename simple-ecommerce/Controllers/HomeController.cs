@@ -22,9 +22,9 @@ namespace ecommerce.Controllers
         private readonly IOrderItemService _orderItemService;
         private readonly ICategoryService _categoryService;
         private readonly IHubContext<AdminNotificationHub> _hub;
+        private readonly IAuthService _authService;
 
-
-        public HomeController(ILogger<HomeController> logger, IProductService productService,
+        public HomeController(ILogger<HomeController> logger, IProductService productService,IAuthService authService,
             IOrderService orderService, IOrderItemService orderItemService, ICategoryService categoryService, IHubContext<AdminNotificationHub> hub)
         {
             _logger = logger;
@@ -33,6 +33,7 @@ namespace ecommerce.Controllers
             _orderItemService = orderItemService;
             _categoryService = categoryService;
             _hub = hub;
+            _authService = authService;
         }
 
         public async Task<IActionResult> Index(
@@ -96,27 +97,50 @@ namespace ecommerce.Controllers
         public async Task<IActionResult> ProductDetails(int id)
         {
             var product = await _productService.GetByIdAsync(id);
+            if (product == null)
+                return NotFound();
 
-            var ratings = product.Ratings ?? new List<ProductRating>();
+            var ratings = await _productService.GetProductRatingsAsync(id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userRating = await _productService.GetUserRatingAsync(id, userId);
+            var averageRating = await _productService.GetAverageRatingAsync(id);
+            var ratingDistribution = await _productService.GetRatingDistributionAsync(id);
+            var users = await _authService.GetAllUsersAsync();
+            Dictionary<string, string> dictionaryUser = users.ToDictionary(
+                    p => p.Id,
+                    p => p.PhoneNumber
+                );
+
+            // Map ratings to ReviewVM (need to get user names from identity context)
+            var reviews = ratings.Select(r => new ProductRatingVM
+            {
+                Id = r.Id,
+                ProductId = r.ProductId,
+                UserId = r.UserId,
+                Rating = r.Rating,
+                Comment = r.Comment,
+                CreatedAt = r.CreatedAt,
+                UserDisplayName = dictionaryUser[r.UserId] // Placeholder - would need user lookup
+            }).ToList();
+
             var vm = new ProductDetailsVM
             {
                 Product = new ProductDto { 
-                 CategoryId = product.CategoryId,
-                  CreatedAt = product.CreatedAt,
-                   Description = product.Description,
+                    CategoryId = product.CategoryId,
+                    CreatedAt = product.CreatedAt,
+                    Description = product.Description,
                     Id = product.Id,
-                     ImageUrl = product.ImageUrl,
-                      IsActive = product.IsActive,
-                       Price = product.Price,
-                        Name = product.Name,
-                         Stock= product.Stock
-                         
+                    ImageUrl = product.ImageUrl,
+                    IsActive = product.IsActive,
+                    Price = product.Price,
+                    Name = product.Name,
+                    Stock = product.Stock
                 },
-                AverageRating = ratings.Any() ? ratings.Average(r => r.Rating) : 0,
-                UserRating = product.Ratings
-            .FirstOrDefault(r => r.UserId == userId)?.Rating ?? 0,
-                TotalRatings = ratings.Count()
+                AverageRating = averageRating,
+                UserRating = (int?)userRating,
+                TotalRatings = ratings.Count(),
+                Reviews = reviews,
+                RatingDistribution = ratingDistribution
             };
             return View(vm);
         }

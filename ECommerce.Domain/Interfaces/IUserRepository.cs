@@ -12,5 +12,6 @@ namespace ECommerce.Domain.Interfaces
         Task<List<ApplicationUser>> GetAllCustomersAsync();
         Task<ApplicationUser?> GetByPhoneAsync(string phone);
         Task AddAsync(ApplicationUser user);
+        Task<List<ApplicationUser>> GetAllUsersAsync();
     }
 }

@@ -58,6 +58,11 @@ namespace ECommerce.Application.Services
         {
             return await _repo.GetAllCustomersAsync();
         }
+
+        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        {
+            return await _repo.GetAllUsersAsync();
+        }
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECommerce.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,10 @@ namespace ECommerce.Domain.Interfaces
         Task UpdateAsync(Product product);
         Task DeleteAsync(int id);
         Task RateProduct(string userId, int productId, int rating);
+        Task<List<ProductRating>> GetProductRatingsAsync(int productId);
+        Task<double> GetAverageRatingAsync(int productId);
+        Task<Dictionary<int, int>> GetRatingDistributionAsync(int productId);
+        Task<int?> GetUserRatingAsync(int productId, string userId);
+        Task<List<ProductRating>> GetAllRatingsAsync();
     }
 }

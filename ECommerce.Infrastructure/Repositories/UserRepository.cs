@@ -43,6 +43,13 @@ namespace ECommerce.Infrastructure.Repositories
 
             return admins.ToList();
         }
+
+        public async Task<List<ApplicationUser>> GetAllUsersAsync()
+        {
+            var users = await _context.Users.ToListAsync();
+
+            return users;
+        }
     }
 
 }

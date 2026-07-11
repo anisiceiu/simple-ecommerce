@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
+using ECommerce.Domain.Entities;
 using ECommerce.Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -87,6 +88,31 @@ namespace ECommerce.Application.Services
         public async Task RateProduct(string userId, int productId, int rating)
         {
            await _repo.RateProduct(userId,productId,rating);
+        }
+
+        public async Task<List<ProductRating>> GetProductRatingsAsync(int productId)
+        {
+            return await _repo.GetProductRatingsAsync(productId);
+        }
+
+        public async Task<double> GetAverageRatingAsync(int productId)
+        {
+            return await _repo.GetAverageRatingAsync(productId);
+        }
+
+        public async Task<Dictionary<int, int>> GetRatingDistributionAsync(int productId)
+        {
+            return await _repo.GetRatingDistributionAsync(productId);
+        }
+
+        public async Task<int?> GetUserRatingAsync(int productId, string userId)
+        {
+            return await _repo.GetUserRatingAsync(productId, userId);
+        }
+
+        public async Task<List<ProductRating>> GetAllRatingsAsync()
+        {
+            return await _repo.GetAllRatingsAsync();
         }
     }
 

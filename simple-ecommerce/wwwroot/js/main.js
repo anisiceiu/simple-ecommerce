@@ -515,11 +515,11 @@ Note: main.js, All Default Scripting Languages For This Theme Included In This F
 /*----------------------------------------*/
 /* 24. Star Rating Js
 /*----------------------------------------*/
-    $(function() {
-          $('.star-rating').barrating({
-            theme: 'fontawesome-stars'
-        });
-    });
+    // $(function() {
+    //       $('.star-rating').barrating({
+    //         theme: 'fontawesome-stars'
+    //     });
+    // });
 /*----------------------------------------*/
 /* 25. Zoom Product Venobox
 /*----------------------------------------*/

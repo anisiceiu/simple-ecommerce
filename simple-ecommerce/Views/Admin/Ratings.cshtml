@@ -1,0 +1,135 @@
+@{
+    ViewData["Title"] = "Product Ratings";
+    Layout = "_LayoutAdmin";
+    var stats = (dynamic)ViewBag.Statistics;
+}
+
+<div class="mb-3">
+    <h3>Product Ratings & Reviews</h3>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-md-3 mb-3">
+        <div class="card border-left-primary shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-primary font-weight-bold text-uppercase mb-1">Total Ratings</div>
+                <div class="h3 mb-0">@stats.TotalRatings</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-warning font-weight-bold text-uppercase mb-1">Average Rating</div>
+                <div class="h3 mb-0">@stats.AverageRating / 5 ⭐</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-success font-weight-bold text-uppercase mb-1">5-Star Ratings</div>
+                <div class="h3 mb-0">@stats.FiveStarRatings</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-3">
+        <div class="card border-left-info shadow h-100 py-2">
+            <div class="card-body">
+                <div class="text-info font-weight-bold text-uppercase mb-1">With Comments</div>
+                <div class="h3 mb-0">@stats.RatingsWithComments</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rating Distribution -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Rating Distribution</h6>
+            </div>
+            <div class="card-body">
+                @for (int stars = 5; stars >= 1; stars--)
+                {
+                    int count = stats.GetType().GetProperty("FiveStarRatings").GetValue(stats, null);
+                    if (stars == 4) count = stats.FourStarRatings;
+                    else if (stars == 3) count = stats.ThreeStarRatings;
+                    else if (stars == 2) count = stats.TwoStarRatings;
+                    else if (stars == 1) count = stats.OneStarRatings;
+
+                    double percentage = stats.TotalRatings > 0 ? (count * 100.0 / stats.TotalRatings) : 0;
+                    <div class="mb-2">
+                        <div class="d-flex justify-content-between mb-1">
+                            <span>@stars ★</span>
+                            <span>@count (@percentage.ToString("0.0")%)</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-warning" role="progressbar" style="width: @percentage%" aria-valuenow="@count" aria-valuemin="0" aria-valuemax="@stats.TotalRatings"></div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">All Ratings</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="ratingsTable" class="table table-bordered" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Rating</th>
+                        <th>Comment</th>
+                        <th>User ID</th>
+                        <th>Created At</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#ratingsTable').DataTable({
+            ajax: {
+                url: '/Admin/GetAllRatings',
+                dataSrc: ''
+            },
+            columns: [
+                { data: 'productName' },
+                { data: 'rating',
+                  render: function(data) {
+                      let stars = '';
+                      for (let i = 0; i < data; i++) {
+                          stars += '<span style="color: #ffc107; font-size: 1.2em;">★</span>';
+                      }
+                      for (let i = data; i < 5; i++) {
+                          stars += '<span style="color: #ccc; font-size: 1.2em;">★</span>';
+                      }
+                      return stars + ' ' + data + '/5';
+                  }
+                },
+                { data: 'comment',
+                  render: function(data) {
+                      return data ? '<small>' + data.substring(0, 50) + (data.length > 50 ? '...' : '') + '</small>' : '<span class="text-muted">No comment</span>';
+                  }
+                },
+                { data: 'userId' },
+                { data: 'createdAt' }
+            ],
+            pageLength: 25,
+            responsive: true,
+            order: [[4, 'desc']]
+        });
+    });
+</script>
+
