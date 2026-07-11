@@ -112,5 +112,31 @@ namespace ecommerce.Controllers
 
             return View(category);
         }
+
+        // DELETE: AJAX endpoint for category deletion
+        [HttpPost]
+        public async Task<IActionResult> DeleteCategory(int id)
+        {
+            try
+            {
+                var category = await _repo.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return Json(new { success = false, message = "Category not found" });
+                }
+
+                var deleted = await _repo.DeleteAsync(id);
+                if (!deleted)
+                {
+                    return Json(new { success = false, message = "Failed to delete category" });
+                }
+
+                return Json(new { success = true, message = "Category deleted successfully!" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Error deleting category: {ex.Message}" });
+            }
+        }
     }
 }
