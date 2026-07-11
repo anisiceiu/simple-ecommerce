@@ -19,6 +19,22 @@ public class ProductRepository : IProductRepository
     public async Task<List<Product>> GetAllAsync()
     => await _context.Products.Include(p => p.Category).ToListAsync();//.Include(p=> p.Ratings)
 
+    public async Task<Dictionary<int, (double AverageRating, int TotalRatings)>> GetProductRatingsAsync(List<int> productIds)
+    {
+        var ratings = await _context.ProductRatings
+            .Where(r => productIds.Contains(r.ProductId))
+            .GroupBy(r => r.ProductId)
+            .Select(g => new
+            {
+                ProductId = g.Key,
+                AverageRating = g.Any() ? Math.Round(g.Average(r => r.Rating), 1) : 0.0,
+                TotalRatings = g.Count()
+            })
+            .ToListAsync();
+
+        return ratings.ToDictionary(x => x.ProductId, x => (x.AverageRating, x.TotalRatings));
+    }
+
 
     public async Task AddAsync(Product product)
     {

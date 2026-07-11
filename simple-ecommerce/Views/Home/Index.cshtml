@@ -62,23 +62,34 @@
                                                         <img onerror="this.onerror=null;this.src='/images/products/no-image.png';" src="/images/products/@item.ImageUrl" alt="Li's Product Image">
 
                                                     </a>
-                                                    <span class="sticker">New</span>
+                                                    @* <span class="sticker">New</span> *@
                                                 </div>
                                                 <div class="product_desc">
                                                     <div class="product_desc_info">
                                                         <div class="product-review">
-                                                            @* <h5 class="manufacturer">
-                                                                <a href="/Home/ProductDetails?id=@item.Id">Category Name</a>
-                                                            </h5> *@
-                                                            @* <div class="rating-box">
-                                                                <ul class="rating">
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li><i class="fa fa-star-o"></i></li>
-                                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                                </ul>
-                                                            </div> *@
+                                                            <!-- Star Rating Display -->
+                                                            @if (item.TotalRatings > 0)
+                                                            {
+                                                                <div class="rating-display mb-2">
+                                                                    @for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        <span class="star" style="color: @(i <= Math.Round(item.AverageRating) ? "#ffc107" : "#ddd"); font-size: 0.9em;">★</span>
+                                                                    }
+                                                                    <span class="rating-value" style="margin-left: 5px; font-size: 0.85em; color: #666;">
+                                                                        @item.AverageRating.ToString("0.0") <span style="color: #999;">(@item.TotalRatings)</span>
+                                                                    </span>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="rating-display mb-2">
+                                                                    @for (int i = 1; i <= 5; i++)
+                                                                    {
+                                                                        <span class="star" style="color: #ddd; font-size: 0.9em;">★</span>
+                                                                    }
+                                                                    <span class="rating-value" style="margin-left: 5px; font-size: 0.85em; color: #999;">No ratings</span>
+                                                                </div>
+                                                            }
                                                         </div>
                                                         <h4><a class="product_name" href="/Home/ProductDetails?id=@item.Id">@item.Name</a></h4>
                                                         <div class="price-box">
@@ -88,7 +99,7 @@
                                                     <div class="add-actions">
                                                         <ul class="add-actions-link">
                                                             <li class="add-cart active"><a class="add-to-cart" data-id="@item.Id" data-name="@item.Name" data-price="@item.Price">Add to cart</a></li>
-                                                            
+
                                                         </ul>
                                                     </div>
                                                 </div>

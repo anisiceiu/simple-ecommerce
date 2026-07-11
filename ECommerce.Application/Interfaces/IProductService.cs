@@ -22,5 +22,6 @@ namespace ECommerce.Application.Interfaces
         Task<Dictionary<int, int>> GetRatingDistributionAsync(int productId);
         Task<int?> GetUserRatingAsync(int productId, string userId);
         Task<List<ProductRating>> GetAllRatingsAsync();
+        Task<Dictionary<int, (double AverageRating, int TotalRatings)>> GetProductRatingsForListAsync(List<int> productIds);
     }
 }

@@ -77,6 +77,21 @@ namespace ecommerce.Controllers
                 .Take(pageSize)
                 .ToList();
 
+            // 🔹 Load ratings for displayed products
+            var productIds = products.Select(p => p.Id).ToList();
+            if (productIds.Any())
+            {
+                var ratingsData = await _productService.GetProductRatingsForListAsync(productIds);
+                foreach (var product in products)
+                {
+                    if (ratingsData.TryGetValue(product.Id, out var ratingInfo))
+                    {
+                        product.AverageRating = ratingInfo.AverageRating;
+                        product.TotalRatings = ratingInfo.TotalRatings;
+                    }
+                }
+            }
+
             ViewBag.CurrentSort = sort;
             ViewBag.CurrentPage = page;
             ViewBag.PageSize = pageSize;

@@ -25,5 +25,7 @@ namespace ECommerce.Application.DTOs
         public IFormFile? Image { get; set; }
         public bool IsActive { get; set; } = true;
         public List<ProductRating>? Ratings { get; set; }
+        public double AverageRating { get; set; } = 0;
+        public int TotalRatings { get; set; } = 0;
     }
 }

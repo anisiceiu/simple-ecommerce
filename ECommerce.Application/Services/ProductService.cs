@@ -114,6 +114,11 @@ namespace ECommerce.Application.Services
         {
             return await _repo.GetAllRatingsAsync();
         }
+
+        public async Task<Dictionary<int, (double AverageRating, int TotalRatings)>> GetProductRatingsForListAsync(List<int> productIds)
+        {
+            return await _repo.GetProductRatingsAsync(productIds);
+        }
     }
 
 }
