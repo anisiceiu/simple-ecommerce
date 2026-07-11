@@ -7,6 +7,9 @@ public class Product
 {
     public int Id { get; set; }
 
+    [MaxLength(50)]
+    public string ProductCode { get; set; }
+
     [Required]
     public int CategoryId { get; set; }
 

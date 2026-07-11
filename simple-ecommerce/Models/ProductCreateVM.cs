@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.DTOs;
+using ECommerce.Application.DTOs;
 using ECommerce.Domain;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -7,7 +7,7 @@ namespace ecommerce.Models
     public class ProductCreateVM
     {
         public ProductDto Product { get; set; }
-
+        public string? NextProductCode { get; set; }
 
         public IEnumerable<SelectListItem> Categories { get; set; }=new List<SelectListItem>();
     }

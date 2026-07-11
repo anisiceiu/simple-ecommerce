@@ -12,8 +12,15 @@
 <form asp-action="Edit" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Product.Id" />
     <input type="hidden" asp-for="Product.CreatedAt" />
+    <input type="hidden" asp-for="Product.ProductCode" />
 
     <div class="row">
+        <div class="col-md-6 mb-3">
+            <label>Product Code</label>
+            <input type="text" class="form-control" value="@Model.Product.ProductCode" disabled />
+            <small class="form-text text-muted">Product code cannot be changed</small>
+        </div>
+
         <div class="col-md-6 mb-3">
             <label>Category</label>
             <select asp-for="Product.CategoryId" asp-items="Model.Categories" class="form-control">
@@ -75,5 +82,3 @@
         </div>
     </div>
 </form>
-
-

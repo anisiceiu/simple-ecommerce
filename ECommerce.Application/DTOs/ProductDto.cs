@@ -1,6 +1,6 @@
 using ECommerce.Domain.Entities;
 
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,6 +14,7 @@ namespace ECommerce.Application.DTOs
     public class ProductDto
     {
         public int Id { get; set; }
+        public string ProductCode { get; set; }
         public int CategoryId { get; set; }
         public string Name { get; set; }
         public DateTime CreatedAt { get; set; }

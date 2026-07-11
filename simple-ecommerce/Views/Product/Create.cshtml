@@ -1,4 +1,4 @@
-﻿@model ProductCreateVM
+@model ProductCreateVM
 
 @{
     ViewData["Title"] = "Add Product";
@@ -9,6 +9,13 @@
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
     <div class="row">
+
+        <div class="col-md-6 mb-3">
+            <label>Product Code</label>
+            <input asp-for="Product.ProductCode" class="form-control" value="@Model.NextProductCode" disabled />
+            <small class="form-text text-muted">Auto-generated product code</small>
+            <input type="hidden" name="NextProductCode"/>
+        </div>
 
         <div class="col-md-6 mb-3">
             <label>Category</label>
@@ -57,4 +64,3 @@
 
     </div>
 </form>
-

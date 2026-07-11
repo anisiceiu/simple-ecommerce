@@ -1,4 +1,4 @@
-﻿using ECommerce.Application.DTOs;
+using ECommerce.Application.DTOs;
 using ECommerce.Application.Interfaces;
 using ECommerce.Domain;
 using ECommerce.Domain.Entities;
@@ -39,6 +39,11 @@ namespace ecommerce.Controllers
 
             };
 
+            // Generate and display the next product code
+            var allProducts = await _productService.GetProductsAsync();
+            var nextProductNumber = (allProducts.Count > 0 ? allProducts.Max(p => p.Id) : 0) + 1;
+            vm.NextProductCode = $"PRD{nextProductNumber:D4}";
+
             return View(vm);
         }
 
@@ -47,6 +52,7 @@ namespace ecommerce.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductCreateVM vm)
         {
+            
             if (ModelState.IsValid)
             {
                 var imageUrl = await SaveImage(vm.Product.Image);
@@ -112,6 +118,7 @@ namespace ecommerce.Controllers
                 Product = new ProductDto
                 {
                     Id = product.Id,
+                    ProductCode = product.ProductCode,
                     CategoryId = product.CategoryId,
                     Name = product.Name,
                     Description = product.Description,
